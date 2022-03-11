@@ -1,23 +1,30 @@
 import React from 'react'
 import { MapContainer, TileLayer } from 'react-leaflet'
+import { YOLA } from '../constants/positions';
+import { DistrictType } from '../types/types';
 import Geoman from './Geoman'
 import LocationMarker from './LocationMarker'
 
-const Map = () => {
+
+interface IMap {
+  addDistrict(newDistrict: DistrictType): void;
+}
+
+const Map = (props: IMap) => {
 
   return (
     <MapContainer
-      center={{lat: 56.6311124, lng: 47.794478}}
+      center={YOLA}
       zoom={11}
       zoomControl={false}
       style={{ height: '100%', width: '100%' }}
     >
       <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="http://osm-new.yoso.ru:8080/tile/{z}/{x}/{y}.png"
       />
       {/* <LocationMarker /> */}
-      <Geoman />
+      <Geoman addDistrict={props.addDistrict} />
     </MapContainer>
   )
 }

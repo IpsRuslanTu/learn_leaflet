@@ -1,0 +1,1 @@
+export const YOLA = {lat: 56.631124, lng: 47.894478}

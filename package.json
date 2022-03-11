@@ -1,6 +1,7 @@
 {
   "name": "yoso",
   "version": "0.1.0",
+  "homepage": "https://ipsruslantu.github.io/learn_leaflet",
   "private": true,
   "dependencies": {
     "@geoman-io/leaflet-geoman-free": "^2.11.4",
@@ -20,6 +21,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -44,6 +47,7 @@
     ]
   },
   "devDependencies": {
-    "@types/leaflet": "^1.7.9"
+    "@types/leaflet": "^1.7.9",
+    "gh-pages": "^3.2.3"
   }
 }

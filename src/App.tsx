@@ -1,13 +1,26 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Map from './components/Map'
+import { DistrictType } from './types/types';
 
-function App() {
+const App = () => {
+
+  const [districts, setDistrict] = useState<DistrictType[]>([]);
+
+  const addDistrict = (newDistrict: DistrictType): void => {
+    setDistrict([...districts, newDistrict])
+  }
 
   return (
-    <div style={{width: '1000px', height: '500px', margin: '0 auto', padding: '20px'}}>
-      <Map />
+    <div className='App'>
+      <Map addDistrict={addDistrict} />
+      <div className='districts'>
+        {districts.map((item, index) => {
+          return <div key={index}>{index}</div>
+        })}
+      </div>
     </div>
   );
 }
 
 export default App;
+
