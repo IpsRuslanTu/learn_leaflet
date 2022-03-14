@@ -6,7 +6,7 @@ import { YOLA } from './constants/positions'
 
 const App = () => {
 
-  const [districts, setDistrict] = useState<LatLngExpression[]>([]);
+  const [districts, setDistrict] = useState<LatLngExpression[]>([])
 
   const addDistrict = (newDistrict: LatLngExpression): void => {
     setDistrict([...districts, newDistrict])
