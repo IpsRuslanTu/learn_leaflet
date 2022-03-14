@@ -9,7 +9,9 @@ const App = () => {
   const [districts, setDistrict] = useState<LatLngExpression[]>([])
 
   const addDistrict = (newDistrict: LatLngExpression): void => {
-    setDistrict([...districts, newDistrict])
+    setDistrict(currentState => {
+      return [...currentState, newDistrict]
+    })
   }
 
   return (
@@ -26,6 +28,7 @@ const App = () => {
         />
         <Geoman addDistrict={addDistrict} />
       </MapContainer>
+      {JSON.stringify(districts)}
     </div>
   );
 }

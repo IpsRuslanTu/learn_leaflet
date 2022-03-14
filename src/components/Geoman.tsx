@@ -2,7 +2,7 @@ import { useLeafletContext, LeafletContextInterface } from "@react-leaflet/core"
 import "@geoman-io/leaflet-geoman-free"
 import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css"
 import { LatLngExpression } from "leaflet";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 
 interface IGeoman {
   addDistrict: (newDistrict: LatLngExpression) => void;
@@ -11,7 +11,6 @@ interface IGeoman {
 const Geoman = (props: IGeoman) => {
 
   const context: LeafletContextInterface = useLeafletContext()
-  const refCoords = useRef()
 
   useEffect(() => {
     const leafletContainer: any = context.layerContainer || context.map;
@@ -27,9 +26,9 @@ const Geoman = (props: IGeoman) => {
     leafletContainer.pm.setGlobalOptions({ pmIgnore: false });
 
     leafletContainer.on('pm:create', (e: any) => {
-      const arr = e.layer._latlngs[0]
-      props.addDistrict(arr)
-      console.log(arr)
+      let newFeature = e.layer._latlngs[0];
+      props.addDistrict(newFeature)
+      console.log(newFeature)
     })
   }, [])
 
