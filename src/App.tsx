@@ -23,6 +23,14 @@ const App = () => {
     })
   }
 
+  const removeDistrict = (id: number): void => {
+    setDistrict(currentState => {
+      return currentState.filter(item => {
+        return item.id !== id
+      })
+    })
+  }
+
   return (
     <div className='App'>
       <MapContainer
@@ -35,7 +43,11 @@ const App = () => {
           attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="http://osm-new.yoso.ru:8080/tile/{z}/{x}/{y}.png"
         />
-        <Geoman addDistrict={addDistrict} changeDistrict={changeDistrict} />
+        <Geoman
+          addDistrict={addDistrict}
+          changeDistrict={changeDistrict}
+          removeDistrict={removeDistrict}
+        />
       </MapContainer>
       {JSON.stringify(districts)}
     </div>
