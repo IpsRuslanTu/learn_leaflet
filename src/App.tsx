@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
-import { MapContainer, TileLayer } from 'react-leaflet'
-import Geoman from './components/Geoman'
-import { YOLA } from './constants/positions'
+import DistrictEditor from './components/DistrictEditor'
+import GeometryOnMapEditor from './components/GeometryOnMapEditor'
 import { DistrictType, Geocode } from './types/types'
 
 const App = () => {
@@ -32,22 +31,9 @@ const App = () => {
 
   return (
     <div className='App'>
-      <MapContainer
-        center={YOLA}
-        zoom={11}
-        zoomControl={false}
-        style={{ height: '100%', width: '100%' }}
-      >
-        <TileLayer
-          attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="http://osm-new.yoso.ru:8080/tile/{z}/{x}/{y}.png"
-        />
-        <Geoman
-          addDistrict={addDistrict}
-          editDistrict={editDistrict}
-          removeDistrict={removeDistrict}
-        />
-      </MapContainer>
+      <GeometryOnMapEditor>
+        <DistrictEditor />
+      </GeometryOnMapEditor>
       {JSON.stringify(districts)}
     </div>
   );
