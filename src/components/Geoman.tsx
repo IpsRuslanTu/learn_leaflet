@@ -2,12 +2,12 @@ import { useLeafletContext, LeafletContextInterface } from "@react-leaflet/core"
 import "@geoman-io/leaflet-geoman-free"
 import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css"
 import { useEffect } from "react"
-import { DistrictType } from "../types/districtType"
-import { LatLngExpression } from "leaflet"
+import { DistrictType, Geocode } from "../types/types"
+import L from "leaflet"
 
 interface IGeoman {
   addDistrict: (newDistrict: DistrictType) => void;
-  changeDistrict: (id: number, newCoords: LatLngExpression) => void;
+  editDistrict: (id: number, newCoords: Geocode[]) => void;
   removeDistrict: (id: number) => void;
 }
 
@@ -24,21 +24,24 @@ const Geoman = (props: IGeoman) => {
       drawRectangle: false,
       drawCircle: false,
       rotateMode: false,
-      dragMode: false
+      dragMode: false,
+      cutPolygon: false
     })
   
     leafletContainer.pm.setGlobalOptions({ pmIgnore: false });
 
     leafletContainer.on('pm:create', (e: any) => {
+      console.log(e)
+
       let geomanLayer = e.layer
+
       let newFeature: DistrictType = {id: geomanLayer._leaflet_id, coords: geomanLayer._latlngs[0]};
       props.addDistrict(newFeature)
-      console.log(e)
 
       e.layer.on("pm:edit", (e: any) => {
         const idForChange = e.layer._leaflet_id
         const changedCoords = e.layer._latlngs[0]
-        props.changeDistrict(idForChange, changedCoords)
+        props.editDistrict(idForChange, changedCoords)
       })
 
       e.layer.on("pm:remove", (e: any) => {

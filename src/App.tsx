@@ -1,9 +1,8 @@
-import { LatLngExpression } from 'leaflet'
 import React, { useState } from 'react'
 import { MapContainer, TileLayer } from 'react-leaflet'
 import Geoman from './components/Geoman'
 import { YOLA } from './constants/positions'
-import { DistrictType } from './types/districtType'
+import { DistrictType, Geocode } from './types/types'
 
 const App = () => {
 
@@ -15,7 +14,7 @@ const App = () => {
     })
   }
 
-  const changeDistrict = (id: number, newCoords: LatLngExpression): void => {
+  const editDistrict = (id: number, newCoords: Geocode[]): void => {
     setDistrict(currentState => {
       return currentState.map(item => {
         return { ...item, coords: (item.id === id) ? newCoords : item.coords }
@@ -45,7 +44,7 @@ const App = () => {
         />
         <Geoman
           addDistrict={addDistrict}
-          changeDistrict={changeDistrict}
+          editDistrict={editDistrict}
           removeDistrict={removeDistrict}
         />
       </MapContainer>
