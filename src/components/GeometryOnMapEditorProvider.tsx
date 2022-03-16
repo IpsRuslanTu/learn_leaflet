@@ -7,13 +7,13 @@ interface IGeometryOnMapEditorProviderProps {
     children?: ReactNode
 }
 
-export const GeometryContext = React.createContext(undefined as GeometryOnMapEditorInterface | undefined);
+export const GeometryContext = React.createContext<GeometryOnMapEditorInterface | undefined>(undefined);
 
 const GeometryOnMapEditorProvider = (props: IGeometryOnMapEditorProviderProps) => {
 
     const context: LeafletContextInterface = useLeafletContext()
     const mapContainer: any = context.layerContainer || context.map;
-    const geometryContext = new GeometryOnMapEditorContext(mapContainer);
+    const geometryContext = React.useMemo(() => new GeometryOnMapEditorContext(mapContainer), [mapContainer]);
 
     React.useEffect(() => {
         mapContainer.pm.addControls({
@@ -30,7 +30,7 @@ const GeometryOnMapEditorProvider = (props: IGeometryOnMapEditorProviderProps) =
         mapContainer.pm.setGlobalOptions({ pmIgnore: false });
 
         console.log("geoman inited");
-    });    
+    }, [mapContainer]);
 
     return (
         <GeometryContext.Provider value={geometryContext}>

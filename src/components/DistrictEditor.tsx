@@ -5,7 +5,11 @@ import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css"
 import { GeometryContext } from './GeometryOnMapEditorProvider';
 import { LatLngExpression } from 'leaflet';
 
-const DistrictEditor = () => {
+interface IDistrictEditorProps {
+    addDistrict: (newDistrict: any) => void;
+}
+
+const DistrictEditor = (props: IDistrictEditorProps) => {
 
     const geometryContext = React.useContext(GeometryContext);
     if (!geometryContext) {
@@ -13,7 +17,7 @@ const DistrictEditor = () => {
     }
 
     geometryContext.onPolygonCreate((coords: LatLngExpression) => {
-        // создать объект DistrictType, передать его дальше в App.tsx
+        props.addDistrict(coords);
     });
     
     return null

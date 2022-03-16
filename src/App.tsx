@@ -32,7 +32,7 @@ const App = () => {
   return (
     <div className='App'>
       <GeometryOnMapEditor>
-        <DistrictEditor />
+        <DistrictEditor addDistrict={addDistrict}/>
       </GeometryOnMapEditor>
       {JSON.stringify(districts)}
     </div>
