@@ -1,7 +1,9 @@
-import { LatLngExpression } from "leaflet";
+import { Geocode } from "../types/types";
 
 export interface GeometryOnMapEditorInterface {
-    subscribeOnPolygonCreate: (action: (id: number, coords: LatLngExpression) => void) => void;
+    subscribeOnPolygonCreate: (action: (id: number, coords: Geocode[]) => void) => void;
 
-    onDeletePoligon: (action: (id: number) => void) => void;
+    onPoligonEdit: (action: (id: number, coords: Geocode[]) => void) => void;
+
+    onPoligonDelete: (action: (id: number) => void) => void;
 }
