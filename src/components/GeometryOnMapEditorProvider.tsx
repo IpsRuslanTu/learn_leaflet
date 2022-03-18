@@ -19,6 +19,7 @@ const GeometryOnMapEditorProvider = (props: IGeometryOnMapEditorProviderProps) =
         mapContainer.pm.addControls({
           position: 'topright',
           drawCircleMarker: false,
+          drawMarker: false,  
           drawPolyline: false,
           drawRectangle: false,
           drawCircle: false,

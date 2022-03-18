@@ -6,4 +6,6 @@ export interface GeometryOnMapEditorInterface {
     onPoligonEdit: (action: (id: number, coords: Geocode[]) => void) => void;
 
     onPoligonDelete: (action: (id: number) => void) => void;
+
+    addPolygon: (id: number, coords: Geocode[]) => void;
 }

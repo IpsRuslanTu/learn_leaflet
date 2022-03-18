@@ -40,7 +40,7 @@ const App = () => {
           removeDistrict={removeDistrict}
         />
       </GeometryOnMapEditor>
-      {JSON.stringify(districts)}
+      <pre>{JSON.stringify(districts, null, 1)}</pre>
     </div>
   )
 }

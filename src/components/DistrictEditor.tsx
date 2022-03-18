@@ -36,15 +36,16 @@ const DistrictEditor = (props: IDistrictEditor) => {
         });
     }, [])
 
-    return (
-        <>
-        {
-            props.districts.map(item => {
-                return <Polygon key={item.id} positions={item.coords} />
-            })
-        }
-        </>
-    )
+    useEffect(() => {
+        // geometryContext.enablePolygonDraw();
+        // geometryContext.enableEditing();
+        // geometryContext.enableDeleting();
+        props.districts.forEach((district) => {
+            geometryContext.addPolygon(district.id, district.coords);
+        });
+    }, [])
+
+    return null
 }
 
 export default DistrictEditor;

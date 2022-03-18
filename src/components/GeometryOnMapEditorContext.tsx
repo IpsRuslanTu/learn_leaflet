@@ -1,3 +1,4 @@
+import * as L from 'leaflet';
 import { LatLngExpression } from "leaflet"
 import { LatLngToGeocode } from "../functions/functions";
 import { Geocode } from "../types/types";
@@ -8,6 +9,7 @@ export class GeometryOnMapEditorContext implements GeometryOnMapEditorInterface 
     private readonly polygonCreateActions: ((id: number, coords: Geocode[]) => void)[];
     private readonly polygonEditActions: ((id: number, coords: Geocode[]) => void)[];
     private readonly polygonDeleteActions: ((id: number) => void)[];
+    private readonly polygonIdMap: { [id: number] : number; }
 
     public constructor(mapContainer: any) {
         console.log("context created");
@@ -15,6 +17,7 @@ export class GeometryOnMapEditorContext implements GeometryOnMapEditorInterface 
         this.polygonCreateActions = [];
         this.polygonEditActions = [];
         this.polygonDeleteActions = [];
+        this.polygonIdMap = {};
         this.subscribeOnEvents();
     }
 
@@ -54,5 +57,24 @@ export class GeometryOnMapEditorContext implements GeometryOnMapEditorInterface 
 
     public onPoligonDelete(action: (id: number) => void): void {
         this.polygonDeleteActions.push(action);
+    }
+
+    public addPolygon(id: number, coords: Geocode[]): void {
+        const latlngs: L.LatLngExpression[] = coords.map((coord) => ({lat: coord.lat, lng: coord.lng}));
+
+        const polygon: any =  L.polygon(latlngs)
+        polygon.addTo(this.mapContainer)
+
+        this.polygonIdMap[polygon._leaflet_id] = id;
+
+        polygon.on('pm:edit', (e: any) => {
+            const idPoligonEdit = e.layer._leaflet_id in this.polygonIdMap
+                ? this.polygonIdMap[e.layer._leaflet_id]
+                : e.layer._leaflet_id;
+            const coordsEditLatLng: LatLngExpression = e.layer.getLatLngs()[0];
+            const geocodeCoordsEdit: Geocode[] = LatLngToGeocode(coordsEditLatLng);
+
+            this.polygonEditActions.forEach((a) => a(idPoligonEdit, geocodeCoordsEdit));
+        })
     }
 }
