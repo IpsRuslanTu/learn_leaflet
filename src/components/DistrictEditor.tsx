@@ -5,15 +5,17 @@ import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css"
 import { GeometryContext } from './GeometryOnMapEditorProvider'
 import { useEffect } from 'react'
 import { DistrictType, Geocode } from '../types/types'
+import { FeatureGroup, Polygon } from 'react-leaflet'
 
 interface IDistrictEditor {
+    districts: DistrictType[];
     addDistrict: (newDistrict: any) => void;
     editDistrict: (id: number, newCoords: Geocode[]) => void;
     removeDistrict: (id: number) => void;
 }
 
 const DistrictEditor = (props: IDistrictEditor) => {
-
+    
     const geometryContext = React.useContext(GeometryContext);
     if (!geometryContext) {
         throw new Error("Geometry context is undefined")
@@ -34,7 +36,15 @@ const DistrictEditor = (props: IDistrictEditor) => {
         });
     }, [])
 
-    return null
+    return (
+        <>
+        {
+            props.districts.map(item => {
+                return <Polygon key={item.id} positions={item.coords} />
+            })
+        }
+        </>
+    )
 }
 
 export default DistrictEditor;

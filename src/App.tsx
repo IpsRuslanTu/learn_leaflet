@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import DistrictEditor from './components/DistrictEditor'
 import GeometryOnMapEditor from './components/GeometryOnMapEditor'
+import { testDistrict } from './constants/testDistrict'
 import { DistrictType, Geocode } from './types/types'
 
 const App = () => {
 
-  const [districts, setDistrict] = useState<DistrictType[]>([])
+  const [districts, setDistrict] = useState<DistrictType[]>([testDistrict])
 
   const addDistrict = (newDistrict: DistrictType): void => {
     setDistrict(currentState => {
@@ -33,6 +34,7 @@ const App = () => {
     <div className='App'>
       <GeometryOnMapEditor>
         <DistrictEditor
+          districts={districts}
           addDistrict={addDistrict}
           editDistrict={editDistrict}
           removeDistrict={removeDistrict}
