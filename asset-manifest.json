@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/learn_leaflet/static/css/main.065a17bf.css",
-    "main.js": "/learn_leaflet/static/js/main.11f9fca4.js",
+    "main.js": "/learn_leaflet/static/js/main.f522fa84.js",
     "index.html": "/learn_leaflet/index.html",
     "main.065a17bf.css.map": "/learn_leaflet/static/css/main.065a17bf.css.map",
-    "main.11f9fca4.js.map": "/learn_leaflet/static/js/main.11f9fca4.js.map"
+    "main.f522fa84.js.map": "/learn_leaflet/static/js/main.f522fa84.js.map"
   },
   "entrypoints": [
     "static/css/main.065a17bf.css",
-    "static/js/main.11f9fca4.js"
+    "static/js/main.f522fa84.js"
   ]
 }
