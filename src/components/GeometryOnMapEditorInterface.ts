@@ -8,4 +8,12 @@ export interface GeometryOnMapEditorInterface {
     onPolygonDelete: (action: (id: number) => void) => void;
 
     addPolygon: (id: number, coords: Geocode[]) => void;
+
+    initGeomanPanel: (selfIntersection: boolean) => void;
+
+    enablePolygonDraw: () => void;
+
+    enableEditing: () => void;
+
+    enableDeleting: () => void;
 }

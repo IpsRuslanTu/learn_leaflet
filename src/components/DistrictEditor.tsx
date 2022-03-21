@@ -21,6 +21,15 @@ const DistrictEditor = (props: IDistrictEditor) => {
     }
 
     useEffect(() => {
+        geometryContext.initGeomanPanel(false);
+        geometryContext.enablePolygonDraw();
+        geometryContext.enableEditing();
+        geometryContext.enableDeleting();
+
+        props.districts.forEach((district) => {
+            geometryContext.addPolygon(district.id, district.coords);
+        });
+
         geometryContext.onPolygonCreate((id: number, coords: Geocode[]) => {
             const newDistrict: DistrictType = { id: id, coords: coords };
             props.addDistrict(newDistrict);
@@ -32,15 +41,6 @@ const DistrictEditor = (props: IDistrictEditor) => {
 
         geometryContext.onPolygonDelete((id: number) => {
             props.removeDistrict(id);
-        });
-    }, [])
-
-    useEffect(() => {
-        // geometryContext.enablePolygonDraw();
-        // geometryContext.enableEditing();
-        // geometryContext.enableDeleting();
-        props.districts.forEach((district) => {
-            geometryContext.addPolygon(district.id, district.coords);
         });
     }, [])
 

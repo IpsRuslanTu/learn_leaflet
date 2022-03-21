@@ -69,6 +69,42 @@ export class GeometryOnMapEditorContext implements GeometryOnMapEditorInterface 
         })
     }
 
+    public initGeomanPanel(selfIntersection: boolean) {
+        this.mapContainer.pm.addControls({
+            position: 'topright',
+            drawCircleMarker: false,
+            drawMarker: false,
+            drawPolyline: false,
+            drawRectangle: false,
+            drawCircle: false,
+            rotateMode: false,
+            dragMode: false,
+            cutPolygon: false,
+            editMode: false,
+            drawPolygon: false,
+            removalMode: false
+        })
+        this.mapContainer.pm.setGlobalOptions({ pmIgnore: false, allowSelfIntersection: selfIntersection })
+    }
+
+    public enablePolygonDraw() {
+        this.mapContainer.pm.addControls({
+            drawPolygon: true
+        })
+    }
+
+    public enableEditing() {
+        this.mapContainer.pm.addControls({
+            editMode: true
+        })
+    }
+
+    public enableDeleting() {
+        this.mapContainer.pm.addControls({
+            removalMode: true
+        })
+    }
+
     public onPolygonCreate(action: (id: number, coords: Geocode[]) => void): void {
         this.polygonCreateActions.push(action);
     }
