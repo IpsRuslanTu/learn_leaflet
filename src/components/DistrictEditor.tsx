@@ -21,7 +21,7 @@ const DistrictEditor = (props: IDistrictEditor) => {
     }
 
     useEffect(() => {
-        geometryContext.initGeomanPanel(false);
+        geometryContext.setSelfIntersection(false);
         geometryContext.enablePolygonDraw();
         geometryContext.enableEditing();
         geometryContext.enableDeleting();

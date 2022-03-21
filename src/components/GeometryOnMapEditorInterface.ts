@@ -9,7 +9,7 @@ export interface GeometryOnMapEditorInterface {
 
     addPolygon: (id: number, coords: Geocode[]) => void;
 
-    initGeomanPanel: (selfIntersection: boolean) => void;
+    setSelfIntersection: (selfIntersection: boolean) => void;
 
     enablePolygonDraw: () => void;
 
