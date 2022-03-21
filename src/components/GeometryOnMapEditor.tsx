@@ -12,7 +12,7 @@ const GeometryOnMapEditor = (props: IGeometryOnMapEditorProps) => {
         <MapContainer
             center={YOLA}
             zoom={11}
-            zoomControl={false}
+            zoomControl={true}
             style={{ height: '100%', width: '100%' }}
         >
             <TileLayer

@@ -47,7 +47,7 @@ const Geoman = (props: IGeoman) => {
       e.layer.on("pm:remove", (e: any) => {
         const idForRemove = e.layer._leaflet_id
         props.removeDistrict(idForRemove)
-        console.log(`poligon № ${idForRemove} deleted`)
+        console.log(`polygon № ${idForRemove} deleted`)
       })
     })
   }, [])

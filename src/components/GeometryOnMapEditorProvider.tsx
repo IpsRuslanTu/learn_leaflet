@@ -17,20 +17,22 @@ const GeometryOnMapEditorProvider = (props: IGeometryOnMapEditorProviderProps) =
 
     React.useEffect(() => {
         mapContainer.pm.addControls({
-          position: 'topright',
-          drawCircleMarker: false,
-          drawPolyline: false,
-          drawRectangle: false,
-          drawCircle: false,
-          rotateMode: false,
-          dragMode: false,
-          cutPolygon: false
+            position: 'topright',
+            drawCircleMarker: false,
+            drawMarker: false,
+            drawPolyline: false,
+            drawRectangle: false,
+            drawCircle: false,
+            rotateMode: false,
+            dragMode: false,
+            cutPolygon: false,
+            editMode: false
         })
-      
-        mapContainer.pm.setGlobalOptions({ pmIgnore: false })
+
+        mapContainer.pm.setGlobalOptions({ pmIgnore: false, allowSelfIntersection: false })
 
         console.log("geoman inited")
-    }, [mapContainer]);    
+    }, [mapContainer]);
 
     return (
         <GeometryContext.Provider value={geometryContext}>
