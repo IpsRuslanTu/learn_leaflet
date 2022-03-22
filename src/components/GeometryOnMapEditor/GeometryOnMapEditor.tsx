@@ -1,17 +1,19 @@
+import { LatLngExpression } from "leaflet";
 import React, { ReactNode } from "react";
 import { MapContainer, TileLayer } from "react-leaflet";
-import { YOLA } from '../constants/positions'
 import GeometryOnMapEditorProvider from "./GeometryOnMapEditorProvider";
 
 export interface IGeometryOnMapEditorProps {
-    children?: ReactNode
+    children?: ReactNode;
+    area: LatLngExpression;
+    zoomValue: number;
 }
 
 const GeometryOnMapEditor = (props: IGeometryOnMapEditorProps) => {
     return (
         <MapContainer
-            center={YOLA}
-            zoom={11}
+            center={props.area}
+            zoom={props.zoomValue}
             zoomControl={true}
             style={{ height: '100%', width: '100%' }}
         >

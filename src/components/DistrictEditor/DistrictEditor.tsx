@@ -2,13 +2,13 @@ import React from 'react'
 import "leaflet"
 import "@geoman-io/leaflet-geoman-free"
 import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css"
-import { GeometryContext } from './GeometryOnMapEditorProvider'
-import { useEffect } from 'react'
-import { DistrictType, Geocode } from '../types/types'
+import { GeometryContext } from '../GeometryOnMapEditor/GeometryOnMapEditorProvider'
+import { Geocode } from '../../models/Geocode'
+import { District } from './DistrictType'
 
 interface IDistrictEditor {
-    districts: DistrictType[];
-    addDistrict: (newDistrict: any) => void;
+    districts: District[];
+    addDistrict: (id: number, newCoords: Geocode[]) => void;
     editDistrict: (id: number, newCoords: Geocode[]) => void;
     removeDistrict: (id: number) => void;
 }
@@ -20,7 +20,7 @@ const DistrictEditor = (props: IDistrictEditor) => {
         throw new Error("Geometry context is undefined")
     }
 
-    useEffect(() => {
+    React.useEffect(() => {
         geometryContext.setSelfIntersection(false);
         geometryContext.enablePolygonDraw();
         geometryContext.enableEditing();
@@ -31,8 +31,7 @@ const DistrictEditor = (props: IDistrictEditor) => {
         });
 
         geometryContext.onPolygonCreate((id: number, coords: Geocode[]) => {
-            const newDistrict: DistrictType = { id: id, coords: coords };
-            props.addDistrict(newDistrict);
+            props.addDistrict(id, coords);
         });
 
         geometryContext.onPolygonEdit((id: number, coords: Geocode[]) => {

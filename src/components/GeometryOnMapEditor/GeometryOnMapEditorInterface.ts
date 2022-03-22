@@ -1,4 +1,4 @@
-import { Geocode } from "../types/types";
+import { Geocode } from "../../models/Geocode";
 
 export interface GeometryOnMapEditorInterface {
     onPolygonCreate: (action: (id: number, coords: Geocode[]) => void) => void;

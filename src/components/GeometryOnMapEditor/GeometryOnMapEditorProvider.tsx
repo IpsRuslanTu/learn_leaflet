@@ -1,7 +1,7 @@
 import { useLeafletContext, LeafletContextInterface } from "@react-leaflet/core"
 import React, { ReactNode } from "react"
 import { GeometryOnMapEditorInterface } from "./GeometryOnMapEditorInterface"
-import { GeometryOnMapEditorContext } from "./GeometryOnMapEditorContext"
+import { LeafletGeomanEditorContext } from "./LeafletGeomanEditorContext"
 
 interface IGeometryOnMapEditorProviderProps {
     children?: ReactNode;
@@ -13,7 +13,7 @@ const GeometryOnMapEditorProvider = (props: IGeometryOnMapEditorProviderProps) =
 
     const context: LeafletContextInterface = useLeafletContext()
     const mapContainer: any = context.layerContainer || context.map
-    const geometryContext = React.useMemo(() => new GeometryOnMapEditorContext(mapContainer), [mapContainer]);
+    const geometryContext = React.useMemo(() => new LeafletGeomanEditorContext(mapContainer), [mapContainer]);
 
     return (
         <GeometryContext.Provider value={geometryContext}>
@@ -22,4 +22,4 @@ const GeometryOnMapEditorProvider = (props: IGeometryOnMapEditorProviderProps) =
     )
 }
 
-export default GeometryOnMapEditorProvider
+export default GeometryOnMapEditorProvider;

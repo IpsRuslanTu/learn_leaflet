@@ -1,16 +1,18 @@
 import { useState } from 'react'
-import DistrictEditor from './components/DistrictEditor'
-import GeometryOnMapEditor from './components/GeometryOnMapEditor'
+import DistrictEditor from './components/DistrictEditor/DistrictEditor'
+import { District } from './components/DistrictEditor/DistrictType'
+import GeometryOnMapEditor from './components/GeometryOnMapEditor/GeometryOnMapEditor'
+import { YOLA } from './constants/positions'
 import { testDistrict, testDistrict2 } from './constants/testDistrict'
-import { DistrictType, Geocode } from './types/types'
+import { Geocode } from './models/Geocode'
 
 const App = () => {
 
-  const [districts, setDistrict] = useState<DistrictType[]>([testDistrict, testDistrict2])
+  const [districts, setDistrict] = useState<District[]>([testDistrict, testDistrict2])
 
-  const addDistrict = (newDistrict: DistrictType): void => {
+  const addDistrict = (id: number, coords: Geocode[]): void => {
     setDistrict(currentState => {
-      return [...currentState, newDistrict]
+      return [...currentState, {id: id, coords: coords}]
     })
   }
 
@@ -32,7 +34,7 @@ const App = () => {
 
   return (
     <div className='App'>
-      <GeometryOnMapEditor>
+      <GeometryOnMapEditor area={YOLA} zoomValue={11} >
         <DistrictEditor
           districts={districts}
           addDistrict={addDistrict}
