@@ -1,4 +1,4 @@
-export class paletteClass {
+export class PaletteEditor {
   color: string;
   private readonly palette: string[];
   private usedPalette: string[];

@@ -2,7 +2,7 @@ import * as L from "leaflet";
 import { LatLngExpression } from "leaflet";
 import { Geocode } from "../../models/Geocode";
 import { GeometryOnMapEditorInterface } from "./GeometryOnMapEditorInterface";
-import { paletteClass } from '../../palette/paletteClass';
+import { PaletteEditor } from '../../palette/PaletteEditor';
 
 export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface {
     private readonly mapContainer: any;
@@ -10,7 +10,7 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
     private readonly polygonEditActions: ((id: number, coords: Geocode[]) => void)[];
     private readonly polygonDeleteActions: ((id: number) => void)[];
     private readonly polygonIdMap: { [id: number]: number };
-    palette = new paletteClass();
+    private palette: PaletteEditor;
 
     public constructor(mapContainer: any) {
         this.mapContainer = mapContainer;
@@ -32,14 +32,14 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
         this.polygonEditActions = [];
         this.polygonDeleteActions = [];
         this.polygonIdMap = {};
-        this.subscribeOnPolygonCreate();
+        this.palette = new PaletteEditor();
     }
 
     public setSelfIntersection(selfIntersection: boolean) {
         this.mapContainer.pm.setGlobalOptions({
             pmIgnore: false,
             allowSelfIntersection: selfIntersection,
-        })   
+        })
     }
 
     public enablePolygonDraw() {
@@ -66,7 +66,7 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
 
         const polygon: any = L.polygon(latlngs, {
             color: this.palette.setAvailableColor()
-        })
+        }).bindPopup('Test Popup');
 
         polygon.addTo(this.mapContainer)
 
@@ -112,16 +112,17 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
                 return
             }
             const geomanLayer = e.layer;
+            const geomanId = geomanLayer._leaflet_id;
+
             geomanLayer.setStyle({color: this.palette.setAvailableColor()});
 
-            const coordsLatLng: LatLngExpression = geomanLayer.getLatLngs()[0];
+            const coordsLatLng: LatLngExpression = geomanLayer.getLatLngs()[0];            
             const geocodeCoords: Geocode[] = this.latLngToGeocode(coordsLatLng);
-            this.polygonIdMap[geomanLayer._leaflet_id] = -geomanLayer._leaflet_id;
+            this.polygonIdMap[geomanId] = -geomanId;
+            this.polygonCreateActions.forEach((a) => a(-geomanId, geocodeCoords));
 
-            this.polygonCreateActions.forEach((a) => a(-geomanLayer._leaflet_id, geocodeCoords));
-
-            this.subcribeOnPolygonEdit(e.layer);
-            this.subscribeOnPolygonDelete(e.layer);
+            this.subcribeOnPolygonEdit(geomanLayer);
+            this.subscribeOnPolygonDelete(geomanLayer);
         })
     }
 
