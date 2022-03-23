@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React from 'react'
 import DistrictEditor from './components/DistrictEditor/DistrictEditor'
 import { District } from './components/DistrictEditor/DistrictType'
 import GeometryOnMapEditor from './components/GeometryOnMapEditor/GeometryOnMapEditor'
@@ -8,7 +8,7 @@ import { Geocode } from './models/Geocode'
 
 const App = () => {
 
-  const [districts, setDistrict] = useState<District[]>([testDistrict, testDistrict2])
+  const [districts, setDistrict] = React.useState<District[]>([testDistrict, testDistrict2])
 
   const addDistrict = (id: number, coords: Geocode[]): void => {
     setDistrict(currentState => {

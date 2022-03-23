@@ -1,5 +1,6 @@
 import * as L from 'leaflet';
 import { LatLngExpression } from "leaflet";
+import { deleteColorFromPalette, getAvailableColor } from '../../palette/palette';
 import { Geocode } from "../../models/Geocode";
 import { GeometryOnMapEditorInterface } from "./GeometryOnMapEditorInterface";
 
@@ -30,20 +31,21 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
         this.polygonEditActions = [];
         this.polygonDeleteActions = [];
         this.polygonIdMap = {};
-        this.subscribeOnEvents();
+        this.subscribeOnPolygonCreate();
     }
 
     public setSelfIntersection(selfIntersection: boolean) {
         this.mapContainer.pm.setGlobalOptions({
             pmIgnore: false,
-            allowSelfIntersection: selfIntersection
-        })
+            allowSelfIntersection: selfIntersection,
+        })   
     }
 
     public enablePolygonDraw() {
         this.mapContainer.pm.addControls({
             drawPolygon: true
         })
+        this.subscribeOnPolygonCreate();
     }
 
     public enableEditing() {
@@ -73,7 +75,10 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
     public addPolygon(id: number, coords: Geocode[]): void {
         const latlngs: L.LatLngExpression[] = this.geocodeToLatLng(coords);
 
-        const polygon: any = L.polygon(latlngs)
+        const polygon: any = L.polygon(latlngs, {
+            color: getAvailableColor()
+        })
+
         polygon.addTo(this.mapContainer)
 
         this.polygonIdMap[polygon._leaflet_id] = id;
@@ -83,19 +88,40 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
     }
 
     private latLngToGeocode(arrLatLng: any): Geocode[] {
-        const geocode: Geocode[] = arrLatLng.map((item: any) => ({lat: item.lat, lng: item.lng}))
+        const geocode: Geocode[] = arrLatLng.map((item: any) => ({ lat: item.lat, lng: item.lng }))
         return geocode;
     }
 
     private geocodeToLatLng(arrGeocode: Geocode[]): LatLngExpression[] {
-        const latlngs: L.LatLngExpression[] = arrGeocode.map((coord) => ({ lat: coord.lat, lng: coord.lng }));
+        const latlngs: L.LatLngExpression[] = arrGeocode.map((coord) => ({ 
+            lat: coord.lat, lng: coord.lng }));
         return latlngs;
     }
 
     private getPolygonIdByLeafletId(leafletId: number): number {
-        return leafletId in this.polygonIdMap
-            ? this.polygonIdMap[leafletId]
-            : leafletId;
+        if (!(leafletId in this.polygonIdMap)) {
+            throw new Error("leafletId not in polygonIdMap")
+        }
+        return this.polygonIdMap[leafletId];
+    }
+
+    private subscribeOnPolygonCreate() {
+        this.mapContainer.on('pm:create', (e: any) => {
+            if (e.shape !== "Polygon") {
+                return
+            }
+            const geomanLayer = e.layer;
+            geomanLayer.setStyle({color: getAvailableColor()});
+
+            const coordsLatLng: LatLngExpression = geomanLayer.getLatLngs()[0];
+            const geocodeCoords: Geocode[] = this.latLngToGeocode(coordsLatLng);
+            this.polygonIdMap[geomanLayer._leaflet_id] = -geomanLayer._leaflet_id;
+
+            this.polygonCreateActions.forEach((a) => a(-geomanLayer._leaflet_id, geocodeCoords));
+
+            this.subcribeOnPolygonEdit(e.layer);
+            this.subscribeOnPolygonDelete(e.layer);
+        })
     }
 
     private subcribeOnPolygonEdit(polygon: any) {
@@ -112,23 +138,7 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
         polygon.on('pm:remove', (e: any) => {
             const idForRemove = this.getPolygonIdByLeafletId(e.layer._leaflet_id);
             this.polygonDeleteActions.forEach((a) => a(idForRemove));
-        })
-    }
-
-    private subscribeOnEvents() {
-        this.mapContainer.on('pm:create', (e: any) => {
-            if (e.shape) {
-                const geomanLayer = e.layer;
-
-                const coordsLatLng: LatLngExpression = geomanLayer.getLatLngs()[0];
-                const geocodeCoords: Geocode[] = this.latLngToGeocode(coordsLatLng);
-                this.polygonIdMap[geomanLayer._leaflet_id] = -geomanLayer._leaflet_id;
-    
-                this.polygonCreateActions.forEach((a) => a(-geomanLayer._leaflet_id, geocodeCoords));
-    
-                this.subcribeOnPolygonEdit(e.layer);
-                this.subscribeOnPolygonDelete(e.layer);
-            }
+            deleteColorFromPalette(polygon.options.color);
         })
     }
 }
