@@ -11,7 +11,7 @@ export class paletteClass {
     this.usedPalette = [];
   }
 
-  public getAvailableColor(): string {
+  public setAvailableColor(): string {
     let color: string | undefined =
       this.palette.find((item: string) => (!this.usedPalette.includes(item)));
     if (typeof color === 'string') {
@@ -24,8 +24,9 @@ export class paletteClass {
     return color;
   }
 
-  public deleteColorFromPalette = (deletedColor: string) => {
+  public deleteColorFromPalette = (deletedColor: string): void => {
     let colorIndex = this.usedPalette.indexOf(deletedColor);
     if (colorIndex !== -1) this.usedPalette.splice(colorIndex, 1);
+    console.log(this.usedPalette);
   }
 }
