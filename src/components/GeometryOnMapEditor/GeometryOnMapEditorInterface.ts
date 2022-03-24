@@ -1,3 +1,4 @@
+import { Polygon } from "leaflet";
 import { Geocode } from "../../models/Geocode";
 
 export interface GeometryOnMapEditorInterface {
@@ -7,7 +8,7 @@ export interface GeometryOnMapEditorInterface {
 
     onPolygonDelete: (action: (id: number) => void) => void;
 
-    addPolygon: (id: number, coords: Geocode[]) => void;
+    addPolygon: (id: number, coords: Geocode[]) => Polygon;
 
     setSelfIntersection: (selfIntersection: boolean) => void;
 
@@ -16,4 +17,6 @@ export interface GeometryOnMapEditorInterface {
     enableEditing: () => void;
 
     enableDeleting: () => void;
+
+    showPopup: (e: any, content: JSX.Element) => void;
 }

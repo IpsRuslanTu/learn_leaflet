@@ -23,11 +23,6 @@ const GeometryOnMapEditor = (props: IGeometryOnMapEditorProps) => {
                 attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="http://osm-new.yoso.ru:8080/tile/{z}/{x}/{y}.png"
             />
-            <Marker position={position}>
-                <Popup editable>
-                    Тестовый Popup
-                </Popup>
-            </Marker>
             <GeometryOnMapEditorProvider>
                 {props.children}
             </GeometryOnMapEditorProvider>
