@@ -1,8 +1,12 @@
+import React, { Component } from "react";
 import * as L from "leaflet";
 import { LatLngExpression } from "leaflet";
 import { Geocode } from "../../models/Geocode";
 import { GeometryOnMapEditorInterface } from "./GeometryOnMapEditorInterface";
 import { PaletteEditor } from '../../palette/PaletteEditor';
+import ReactDOM from "react-dom";
+import ReactDOMServer from "react-dom/server";
+import TestPopup from "./TestPopup";
 
 export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface {
     private readonly mapContainer: any;
@@ -66,11 +70,13 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
 
         const polygon: any = L.polygon(latlngs, {
             color: this.palette.setAvailableColor()
-        }).bindPopup('Test Popup');
-
-        polygon.addTo(this.mapContainer)
+        });
+        
 
         this.polygonIdMap[polygon._leaflet_id] = id;
+        polygon.bindPopup("<img src='https://webdelphi.ru/wp-content/uploads/2012/01/Apple-Logo-icon.png'>",
+        {editable: true});
+        polygon.addTo(this.mapContainer)
 
         this.subcribeOnPolygonEdit(polygon);
         this.subscribeOnPolygonDelete(polygon);
@@ -94,8 +100,9 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
     }
 
     private geocodeToLatLng(arrGeocode: Geocode[]): LatLngExpression[] {
-        const latlngs: L.LatLngExpression[] = arrGeocode.map((coord) => ({ 
-            lat: coord.lat, lng: coord.lng }));
+        const latlngs: L.LatLngExpression[] = arrGeocode.map((coord) => ({
+            lat: coord.lat, lng: coord.lng
+        }));
         return latlngs;
     }
 
@@ -114,9 +121,10 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
             const geomanLayer = e.layer;
             const geomanId = geomanLayer._leaflet_id;
 
-            geomanLayer.setStyle({color: this.palette.setAvailableColor()});
+            geomanLayer.setStyle({ color: this.palette.setAvailableColor() });
+            geomanLayer.bindPopup(ReactDOMServer.renderToString(<TestPopup />));
 
-            const coordsLatLng: LatLngExpression = geomanLayer.getLatLngs()[0];            
+            const coordsLatLng: LatLngExpression = geomanLayer.getLatLngs()[0];
             const geocodeCoords: Geocode[] = this.latLngToGeocode(coordsLatLng);
             this.polygonIdMap[geomanId] = -geomanId;
             this.polygonCreateActions.forEach((a) => a(-geomanId, geocodeCoords));
