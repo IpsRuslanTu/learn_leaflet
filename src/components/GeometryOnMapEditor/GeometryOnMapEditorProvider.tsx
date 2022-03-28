@@ -4,6 +4,7 @@ import { LatLngExpression } from "leaflet";
 import { Marker, Popup } from "react-leaflet";
 import { GeometryOnMapEditorInterface } from "./GeometryOnMapEditorInterface";
 import { LeafletGeomanEditorContext } from "./LeafletGeomanEditorContext";
+import TestPopup from "./TestPopup";
 
 interface IGeometryOnMapEditorProviderProps {
     children?: ReactNode;
