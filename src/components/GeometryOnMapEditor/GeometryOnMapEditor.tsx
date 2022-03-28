@@ -1,8 +1,7 @@
 import { LatLngExpression } from "leaflet";
 import React, { ReactNode } from "react";
-import { MapContainer, Marker, TileLayer } from "react-leaflet";
+import { MapContainer, Polygon, TileLayer } from "react-leaflet";
 import GeometryOnMapEditorProvider from "./GeometryOnMapEditorProvider";
-import Popup from 'react-leaflet-editable-popup';
 
 export interface IGeometryOnMapEditorProps {
     children?: ReactNode;
@@ -11,7 +10,6 @@ export interface IGeometryOnMapEditorProps {
 }
 
 const GeometryOnMapEditor = (props: IGeometryOnMapEditorProps) => {
-    const position: LatLngExpression = [56.631124, 47.894478]
     return (
         <MapContainer
             center={props.area}
@@ -23,11 +21,6 @@ const GeometryOnMapEditor = (props: IGeometryOnMapEditorProps) => {
                 attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="http://osm-new.yoso.ru:8080/tile/{z}/{x}/{y}.png"
             />
-            <Marker position={position}>
-                <Popup editable>
-                    Тестовый Popup
-                </Popup>
-            </Marker>
             <GeometryOnMapEditorProvider>
                 {props.children}
             </GeometryOnMapEditorProvider>

@@ -1,12 +1,10 @@
-import React, { Component } from "react";
+import React from "react";
 import * as L from "leaflet";
 import { LatLngExpression } from "leaflet";
 import { Geocode } from "../../models/Geocode";
 import { GeometryOnMapEditorInterface } from "./GeometryOnMapEditorInterface";
 import { PaletteEditor } from '../../palette/PaletteEditor';
-import ReactDOM from "react-dom";
-import ReactDOMServer from "react-dom/server";
-import TestPopup from "./TestPopup";
+import { WorkWithPolygon } from "../../classes/WorkWithPolygon";
 
 export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface {
     private readonly mapContainer: any;
@@ -15,8 +13,10 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
     private readonly polygonDeleteActions: ((id: number) => void)[];
     private readonly polygonIdMap: { [id: number]: number };
     private palette: PaletteEditor;
+    private markerRef: React.RefObject<L.Marker>;
+    private setPopupContent: any;
 
-    public constructor(mapContainer: any) {
+    public constructor(mapContainer: any, markerRef: React.RefObject<L.Marker>, setPopupContent: any) {
         this.mapContainer = mapContainer;
         this.mapContainer.pm.addControls({
             position: 'topright',
@@ -37,6 +37,8 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
         this.polygonDeleteActions = [];
         this.polygonIdMap = {};
         this.palette = new PaletteEditor();
+        this.markerRef = markerRef;
+        this.setPopupContent = setPopupContent;
     }
 
     public setSelfIntersection(selfIntersection: boolean) {
@@ -65,21 +67,23 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
         })
     }
 
-    public addPolygon(id: number, coords: Geocode[]): void {
+    public addPolygon(id: number, coords: Geocode[]): any {
         const latlngs: L.LatLngExpression[] = this.geocodeToLatLng(coords);
 
         const polygon: any = L.polygon(latlngs, {
             color: this.palette.setAvailableColor()
         });
-        
 
         this.polygonIdMap[polygon._leaflet_id] = id;
-        polygon.bindPopup("<img src='https://webdelphi.ru/wp-content/uploads/2012/01/Apple-Logo-icon.png'>",
-        {editable: true});
-        polygon.addTo(this.mapContainer)
+
+        const polygonPopup = new WorkWithPolygon(polygon, id);
+
+        polygon.addTo(this.mapContainer);
 
         this.subcribeOnPolygonEdit(polygon);
         this.subscribeOnPolygonDelete(polygon);
+
+        return polygonPopup;
     }
 
     public onPolygonCreate(action: (id: number, coords: Geocode[]) => void): void {
@@ -92,6 +96,11 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
 
     public onPolygonDelete(action: (id: number) => void): void {
         this.polygonDeleteActions.push(action);
+    }
+
+    public showPopup(e: any, content: JSX.Element): void {
+        this.setPopupContent(content);
+        this.markerRef.current?.setLatLng(e.latlng).openPopup();
     }
 
     private latLngToGeocode(arrLatLng: any): Geocode[] {
@@ -122,7 +131,6 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
             const geomanId = geomanLayer._leaflet_id;
 
             geomanLayer.setStyle({ color: this.palette.setAvailableColor() });
-            geomanLayer.bindPopup(ReactDOMServer.renderToString(<TestPopup />));
 
             const coordsLatLng: LatLngExpression = geomanLayer.getLatLngs()[0];
             const geocodeCoords: Geocode[] = this.latLngToGeocode(coordsLatLng);
