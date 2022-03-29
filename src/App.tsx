@@ -32,6 +32,14 @@ const App = () => {
     })
   }
 
+  const changeDistrictName = (id: number, name: string): void => {
+    setDistrict(currentState => {
+      return currentState.filter(item => {
+        return item.districtName !== name;
+      })
+    })
+  }
+
   return (
     <div className='App'>
       <GeometryOnMapEditor area={YOLA} zoomValue={11} >
@@ -40,6 +48,7 @@ const App = () => {
           addDistrict={addDistrict}
           editDistrict={editDistrict}
           removeDistrict={removeDistrict}
+          changeDistrictName={changeDistrictName}
         />
       </GeometryOnMapEditor>
       <pre>{JSON.stringify(districts, null, 1)}</pre>

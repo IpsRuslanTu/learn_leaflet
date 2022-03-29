@@ -1,17 +1,20 @@
 export class WorkWithPopup {
-  private markerRef: React.RefObject<L.Marker>;
   private setPopupContent: any;
+  private setMarkerPos: any;
+  private markerRef: any;
 
-  constructor(markerRef: React.RefObject<L.Marker>, setPopupContent: any) {
-    this.markerRef = markerRef;
+  constructor(markerRef: any, setPopupContent: any, setMarkerPos: any) {
     this.setPopupContent = setPopupContent;
+    this.setMarkerPos = setMarkerPos;
+    this.markerRef = markerRef;
   }
 
   public setContent(content: JSX.Element) {
     this.setPopupContent(content);
   }
 
-  public openPopup(position: {lat: number, lng: number}) {
-    this.markerRef.current?.setLatLng(position);
+  public movePopup(position: {lat: number, lng: number}) {
+    this.setMarkerPos(position);
+    this.markerRef.current.openPopup();
   }
 }

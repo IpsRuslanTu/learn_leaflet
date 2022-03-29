@@ -1,4 +1,3 @@
-import { Polygon } from "leaflet";
 import { Geocode } from "../../models/Geocode";
 
 export interface GeometryOnMapEditorInterface {

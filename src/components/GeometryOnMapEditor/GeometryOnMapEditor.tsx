@@ -1,6 +1,6 @@
 import { LatLngExpression } from "leaflet";
 import React, { ReactNode } from "react";
-import { MapContainer, Polygon, TileLayer } from "react-leaflet";
+import { MapContainer, TileLayer } from "react-leaflet";
 import GeometryOnMapEditorProvider from "./GeometryOnMapEditorProvider";
 
 export interface IGeometryOnMapEditorProps {

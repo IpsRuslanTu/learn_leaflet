@@ -13,6 +13,7 @@ interface IDistrictEditor {
     addDistrict: (id: number, newCoords: Geocode[]) => void;
     editDistrict: (id: number, newCoords: Geocode[]) => void;
     removeDistrict: (id: number) => void;
+    changeDistrictName: (id: number, name: string) => void;
 }
 
 const DistrictEditor = (props: IDistrictEditor) => {
@@ -28,8 +29,7 @@ const DistrictEditor = (props: IDistrictEditor) => {
 
     const onDistrictNameChange = (id: number, e: any) => {
         setDistrictName(e.target.value);
-        console.log(id, e.target.value);
-        // props.changeDistrictName(id, e.target.value);
+        props.changeDistrictName(id, e.target.value);
     };
     
     const content = (id: number, name: string) => {

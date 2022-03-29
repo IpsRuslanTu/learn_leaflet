@@ -13,10 +13,9 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
     private readonly polygonDeleteActions: ((id: number) => void)[];
     private readonly polygonIdMap: { [id: number]: number };
     private palette: PaletteEditor;
-    private markerRef: React.RefObject<L.Marker>;
-    private setPopupContent: any;
+    private popup;
 
-    public constructor(mapContainer: any, markerRef: React.RefObject<L.Marker>, setPopupContent: any) {
+    public constructor(mapContainer: any, popup: any) {
         this.mapContainer = mapContainer;
         this.mapContainer.pm.addControls({
             position: 'topright',
@@ -37,8 +36,7 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
         this.polygonDeleteActions = [];
         this.polygonIdMap = {};
         this.palette = new PaletteEditor();
-        this.markerRef = markerRef;
-        this.setPopupContent = setPopupContent;
+        this.popup = popup;
     }
 
     public setSelfIntersection(selfIntersection: boolean) {
@@ -99,8 +97,8 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
     }
 
     public showPopup(e: any, content: JSX.Element): void {
-        this.setPopupContent(content);
-        this.markerRef.current?.setLatLng(e.latlng).openPopup();
+        this.popup.setPopupContent(content);
+        this.popup.movePopup(e.latlng);
     }
 
     private latLngToGeocode(arrLatLng: any): Geocode[] {
