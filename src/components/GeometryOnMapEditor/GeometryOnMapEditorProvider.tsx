@@ -1,6 +1,6 @@
 import { useLeafletContext, LeafletContextInterface } from "@react-leaflet/core";
 import React, { ReactNode } from "react";
-import { LatLngExpression } from "leaflet";
+import L, { LatLngExpression } from "leaflet";
 import { Marker, Popup } from "react-leaflet";
 import { GeometryOnMapEditorInterface } from "./GeometryOnMapEditorInterface";
 import { LeafletGeomanEditorContext } from "./LeafletGeomanEditorContext";
@@ -30,7 +30,7 @@ const GeometryOnMapEditorProvider = (props: IGeometryOnMapEditorProviderProps) =
     return (
         <GeometryContext.Provider value={geometryContext}>
             <Marker position={markerPos} ref={markerRef}>
-                <Popup>
+                <Popup minWidth={200} >
                     {popupContent}
                 </Popup>
             </Marker>

@@ -34,8 +34,8 @@ const App = () => {
 
   const changeDistrictName = (id: number, name: string): void => {
     setDistrict(currentState => {
-      return currentState.filter(item => {
-        return item.districtName !== name;
+      return currentState.map(item => {
+        return { ...item, districtName: (item.id === id) ? name : item.districtName }
       })
     })
   }

@@ -96,7 +96,7 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
         this.polygonDeleteActions.push(action);
     }
 
-    public showPopup(e: any, content: JSX.Element): void {
+    public showPopup(e: any, content: JSX.Element | undefined): void {
         this.popup.setPopupContent(content);
         this.popup.movePopup(e.latlng);
     }

@@ -14,6 +14,6 @@ export class WorkWithPolygon {
   }
   
   public getId() {
-    return this.polygon._leaflet_id;
+    return this.id;
   }
 }
