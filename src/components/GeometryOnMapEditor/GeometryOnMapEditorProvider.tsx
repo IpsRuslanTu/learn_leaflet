@@ -29,11 +29,6 @@ const GeometryOnMapEditorProvider = (props: IGeometryOnMapEditorProviderProps) =
 
     return (
         <GeometryContext.Provider value={geometryContext}>
-            <Marker position={markerPos} ref={markerRef}>
-                <Popup minWidth={200} >
-                    {popupContent}
-                </Popup>
-            </Marker>
             {props.children}
         </GeometryContext.Provider>
     )

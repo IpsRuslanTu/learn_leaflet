@@ -6,6 +6,8 @@ import { GeometryContext } from '../GeometryOnMapEditor/GeometryOnMapEditorProvi
 import { Geocode } from '../../models/Geocode'
 import { District } from './DistrictType'
 import { Input } from 'antd'
+import { Marker, Popup } from 'react-leaflet'
+import { LatLngExpression } from 'leaflet'
 
 interface IDistrictEditor {
     districts: District[];
@@ -22,19 +24,16 @@ const DistrictEditor = (props: IDistrictEditor) => {
         throw new Error("Geometry context is undefined")
     }
 
-    const [districtName, setDistrictName] = React.useState<string | null>(null);
+    const [districtName, setDistrictName] = React.useState<string>('');
+    const [markerPos, setMarkerPos] = React.useState<LatLngExpression>([56.631124, 47.894478]);
+    const markerRef = React.useRef<L.Marker>(null);
 
     // const districtsRef = React.useRef(props.districts);
 
-    const onDistrictNameChange = (id: number, e: any) => {
+    const onDistrictNameChange = (e: any) => {
         setDistrictName(e.target.value);
-        props.changeDistrictName(id, e.target.value);
+        // props.changeDistrictName(id, e.target.value);
     };
-    
-    const content = (id: number, name: string) => {
-        return <Input value={districtName ? districtName : name} onChange={(e: any) => onDistrictNameChange(id, e)} />;
-        // return <div contentEditable suppressContentEditableWarning={true} onChange={(e: any) => onDistrictNameChange(id, e)}>{name}</div>
-    }
 
     React.useEffect(() => {
         geometryContext.setSelfIntersection(false);
@@ -46,8 +45,9 @@ const DistrictEditor = (props: IDistrictEditor) => {
             const a: any = geometryContext.addPolygon(district.id, district.coords);
 
             a.onClick((e: any) => {
-                geometryContext.showPopup(e, content(a.getId(), 
-                    district.districtName ? district.districtName : ''));
+                setMarkerPos(e.latlng);
+                setDistrictName(district.districtName ? district.districtName : '');
+                markerRef.current?.openPopup();
             })
         });
 
@@ -65,7 +65,13 @@ const DistrictEditor = (props: IDistrictEditor) => {
         });
     }, [props])
 
-    return null
+    return (
+        <Marker position={markerPos} ref={markerRef}>
+            <Popup minWidth={200}>
+                <Input value={districtName} onChange={onDistrictNameChange} />    
+            </Popup>
+        </Marker>
+    )
 }
 
 export default DistrictEditor;
