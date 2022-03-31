@@ -1,4 +1,3 @@
-import React from "react";
 import * as L from "leaflet";
 import { LatLngExpression } from "leaflet";
 import { Geocode } from "../../models/Geocode";
@@ -13,9 +12,9 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
     private readonly polygonDeleteActions: ((id: number) => void)[];
     private readonly polygonIdMap: { [id: number]: number };
     private palette: PaletteEditor;
-    private popup;
+    private copyPolygon: any | undefined = undefined;
 
-    public constructor(mapContainer: any, popup: any) {
+    public constructor(mapContainer: any) {
         this.mapContainer = mapContainer;
         this.mapContainer.pm.addControls({
             position: 'topright',
@@ -36,7 +35,6 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
         this.polygonDeleteActions = [];
         this.polygonIdMap = {};
         this.palette = new PaletteEditor();
-        this.popup = popup;
     }
 
     public setSelfIntersection(selfIntersection: boolean) {
@@ -69,19 +67,23 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
         const latlngs: L.LatLngExpression[] = this.geocodeToLatLng(coords);
 
         const polygon: any = L.polygon(latlngs, {
-            color: this.palette.setAvailableColor()
+            color: this.palette.setAvailableColor(),
         });
 
         this.polygonIdMap[polygon._leaflet_id] = id;
-
-        const polygonPopup = new WorkWithPolygon(polygon, id);
 
         polygon.addTo(this.mapContainer);
 
         this.subcribeOnPolygonEdit(polygon);
         this.subscribeOnPolygonDelete(polygon);
 
-        return polygonPopup;
+        const polygonPopup = new WorkWithPolygon(polygon, id);
+
+        this.copyPolygon = polygonPopup;
+    }
+
+    public getCopyPolygon() {
+        return this.copyPolygon;
     }
 
     public onPolygonCreate(action: (id: number, coords: Geocode[]) => void): void {
@@ -94,11 +96,6 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
 
     public onPolygonDelete(action: (id: number) => void): void {
         this.polygonDeleteActions.push(action);
-    }
-
-    public showPopup(e: any, content: JSX.Element | undefined): void {
-        this.popup.setPopupContent(content);
-        this.popup.movePopup(e.latlng);
     }
 
     private latLngToGeocode(arrLatLng: any): Geocode[] {

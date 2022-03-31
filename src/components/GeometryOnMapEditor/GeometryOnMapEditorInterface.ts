@@ -17,5 +17,5 @@ export interface GeometryOnMapEditorInterface {
 
     enableDeleting: () => void;
 
-    showPopup: (e: any, content: JSX.Element) => void;
+    getCopyPolygon: () => any;
 }

@@ -18,21 +18,22 @@ interface IDistrictEditor {
 }
 
 const DistrictEditor = (props: IDistrictEditor) => {
-
     const geometryContext = React.useContext(GeometryContext);
     if (!geometryContext) {
         throw new Error("Geometry context is undefined")
     }
 
+    const [selectedDistrictId, setSelectedDistrictId] = React.useState<number | undefined>(undefined);
     const [districtName, setDistrictName] = React.useState<string>('');
     const [markerPos, setMarkerPos] = React.useState<LatLngExpression>([56.631124, 47.894478]);
     const markerRef = React.useRef<L.Marker>(null);
 
-    // const districtsRef = React.useRef(props.districts);
+    const [renderPolygons, toggleRenderPolygons] = React.useState<boolean>(true);
 
     const onDistrictNameChange = (e: any) => {
         setDistrictName(e.target.value);
-        // props.changeDistrictName(id, e.target.value);
+        if (selectedDistrictId)
+            props.changeDistrictName(selectedDistrictId, e.target.value);
     };
 
     React.useEffect(() => {
@@ -40,19 +41,27 @@ const DistrictEditor = (props: IDistrictEditor) => {
         geometryContext.enablePolygonDraw();
         geometryContext.enableEditing();
         geometryContext.enableDeleting();
+    }, []);
 
+    React.useEffect(() => {
         props.districts.forEach((district) => {
-            const a: any = geometryContext.addPolygon(district.id, district.coords);
-
+            if (renderPolygons)
+            {
+                geometryContext.addPolygon(district.id, district.coords);
+            }
+            const a = geometryContext.getCopyPolygon();
             a.onClick((e: any) => {
+                setSelectedDistrictId(a.getId());
                 setMarkerPos(e.latlng);
                 setDistrictName(district.districtName ? district.districtName : '');
                 markerRef.current?.openPopup();
             })
-        });
+        }); 
+        toggleRenderPolygons(false);
+    }, [props]);
 
+    React.useEffect(() => {
         geometryContext.onPolygonCreate((id: number, coords: Geocode[]) => {
-            // console.log(districtsRef.current.length);
             props.addDistrict(id, coords);
         });
 
@@ -63,12 +72,12 @@ const DistrictEditor = (props: IDistrictEditor) => {
         geometryContext.onPolygonDelete((id: number) => {
             props.removeDistrict(id);
         });
-    }, [props])
+    }, [])
 
     return (
         <Marker position={markerPos} ref={markerRef}>
             <Popup minWidth={200}>
-                <Input value={districtName} onChange={onDistrictNameChange} />    
+                <Input value={districtName} onChange={onDistrictNameChange} />
             </Popup>
         </Marker>
     )
