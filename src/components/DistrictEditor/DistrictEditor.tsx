@@ -8,6 +8,7 @@ import { District } from './DistrictType'
 import { Input } from 'antd'
 import { Marker, Popup } from 'react-leaflet'
 import { LatLngExpression } from 'leaflet'
+import { Polygon } from '../GeometryOnMapEditor/models/Polygon'
 
 interface IDistrictEditor {
     districts: District[];
@@ -24,17 +25,32 @@ const DistrictEditor = (props: IDistrictEditor) => {
     }
 
     const [selectedDistrictId, setSelectedDistrictId] = React.useState<number | undefined>(undefined);
-    const [districtName, setDistrictName] = React.useState<string>('');
     const [markerPos, setMarkerPos] = React.useState<LatLngExpression>([56.631124, 47.894478]);
+    const [districtName, setDistrictName] = React.useState<string | undefined>(undefined);
     const markerRef = React.useRef<L.Marker>(null);
 
-    const [renderPolygons, toggleRenderPolygons] = React.useState<boolean>(true);
-
-    const onDistrictNameChange = (e: any) => {
+    const onDistrictNameChange =  React.useCallback((e: any) => {
         setDistrictName(e.target.value);
-        if (selectedDistrictId)
+        if (selectedDistrictId) {
             props.changeDistrictName(selectedDistrictId, e.target.value);
-    };
+        }
+    }, [selectedDistrictId]);  
+
+    const onPolygonClick = React.useCallback((e: any, districtId: number) => {
+        setSelectedDistrictId(districtId);
+        setMarkerPos(e.latlng);
+    }, [])
+
+    React.useEffect(() => {
+        if (!selectedDistrictId) return;
+
+        const district = props.districts.find((x) => x.id === selectedDistrictId)
+
+        if (!district) return;
+        
+        setDistrictName(district.districtName);
+        markerRef.current?.openPopup();
+    }, [selectedDistrictId, props.districts, markerPos]);
 
     React.useEffect(() => {
         geometryContext.setSelfIntersection(false);
@@ -44,25 +60,16 @@ const DistrictEditor = (props: IDistrictEditor) => {
     }, []);
 
     React.useEffect(() => {
-        props.districts.forEach((district) => {
-            if (renderPolygons)
-            {
-                geometryContext.addPolygon(district.id, district.coords);
-            }
-            const a = geometryContext.getCopyPolygon();
-            a.onClick((e: any) => {
-                setSelectedDistrictId(a.getId());
-                setMarkerPos(e.latlng);
-                setDistrictName(district.districtName ? district.districtName : '');
-                markerRef.current?.openPopup();
-            })
+        props.districts.forEach((existingDistrict) => {
+            const polygon = geometryContext.addPolygon(existingDistrict.id, existingDistrict.coords);
+            polygon.onClick(onPolygonClick)
         }); 
-        toggleRenderPolygons(false);
-    }, [props]);
+    }, []);
 
     React.useEffect(() => {
-        geometryContext.onPolygonCreate((id: number, coords: Geocode[]) => {
-            props.addDistrict(id, coords);
+        geometryContext.onPolygonCreate((polygon: Polygon) => {
+            props.addDistrict(polygon.getId(), []);
+            polygon.onClick(onPolygonClick);
         });
 
         geometryContext.onPolygonEdit((id: number, coords: Geocode[]) => {
