@@ -5,11 +5,9 @@ import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css"
 import { GeometryContext } from '../GeometryOnMapEditor/GeometryOnMapEditorProvider'
 import { Geocode } from '../../models/Geocode'
 import { District } from './DistrictType'
-import { Button, Input } from 'antd'
-import { Marker, Popup } from 'react-leaflet'
 import L, { LatLngExpression } from 'leaflet'
 import { Polygon } from '../GeometryOnMapEditor/models/Polygon'
-import { icon } from './Icon/Icon'
+import Title from './Title'
 
 interface IDistrictEditor {
     districts: District[];
@@ -83,16 +81,12 @@ const DistrictEditor = (props: IDistrictEditor) => {
     }, [])
 
     return (
-        <Marker icon={icon} position={markerPos} ref={markerRef}>
-            <Popup minWidth={200}>
-                <Input
-                    style={{ marginBottom: "13px" }}
-                    value={districtName}
-                    onChange={onDistrictNameChange}
-                />
-                <Button type="primary" size="small">Сохранить</Button>
-            </Popup>
-        </Marker>
+        <Title
+            markerPos={markerPos}
+            markerRef={markerRef}
+            districtName={districtName}
+            onDistrictNameChange={onDistrictNameChange}
+        />
     )
 }
 
