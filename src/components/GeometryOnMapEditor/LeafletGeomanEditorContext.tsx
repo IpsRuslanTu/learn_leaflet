@@ -2,7 +2,7 @@ import * as L from "leaflet";
 import { LatLngExpression } from "leaflet";
 import { Geocode } from "../../models/Geocode";
 import { GeometryOnMapEditorInterface } from "./GeometryOnMapEditorInterface";
-import { PaletteEditor } from '../../palette/PaletteEditor';
+import { Palette } from './models/Palette';
 import { Polygon } from "./models/Polygon";
 
 export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface {
@@ -11,7 +11,7 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
     private readonly polygonEditActions: ((id: number, coords: Geocode[]) => void)[];
     private readonly polygonDeleteActions: ((id: number) => void)[];
     private readonly polygonIdMap: { [id: number]: number };
-    private palette: PaletteEditor;
+    private palette: Palette;
 
     public constructor(mapContainer: any) {
         this.mapContainer = mapContainer;
@@ -33,7 +33,7 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
         this.polygonEditActions = [];
         this.polygonDeleteActions = [];
         this.polygonIdMap = {};
-        this.palette = new PaletteEditor();
+        this.palette = new Palette();
     }
 
     public setSelfIntersection(selfIntersection: boolean) {

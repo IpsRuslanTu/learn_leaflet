@@ -5,10 +5,11 @@ import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css"
 import { GeometryContext } from '../GeometryOnMapEditor/GeometryOnMapEditorProvider'
 import { Geocode } from '../../models/Geocode'
 import { District } from './DistrictType'
-import { Input } from 'antd'
+import { Button, Input } from 'antd'
 import { Marker, Popup } from 'react-leaflet'
-import { LatLngExpression } from 'leaflet'
+import L, { LatLngExpression } from 'leaflet'
 import { Polygon } from '../GeometryOnMapEditor/models/Polygon'
+import { icon } from './Icon/Icon'
 
 interface IDistrictEditor {
     districts: District[];
@@ -29,12 +30,12 @@ const DistrictEditor = (props: IDistrictEditor) => {
     const [districtName, setDistrictName] = React.useState<string | undefined>(undefined);
     const markerRef = React.useRef<L.Marker>(null);
 
-    const onDistrictNameChange =  React.useCallback((e: any) => {
+    const onDistrictNameChange = React.useCallback((e: any) => {
         setDistrictName(e.target.value);
         if (selectedDistrictId) {
             props.changeDistrictName(selectedDistrictId, e.target.value);
         }
-    }, [selectedDistrictId]);  
+    }, [selectedDistrictId]);
 
     const onPolygonClick = React.useCallback((e: any, districtId: number) => {
         setSelectedDistrictId(districtId);
@@ -47,7 +48,7 @@ const DistrictEditor = (props: IDistrictEditor) => {
         const district = props.districts.find((x) => x.id === selectedDistrictId)
 
         if (!district) return;
-        
+
         setDistrictName(district.districtName);
         markerRef.current?.openPopup();
     }, [selectedDistrictId, props.districts, markerPos]);
@@ -63,7 +64,7 @@ const DistrictEditor = (props: IDistrictEditor) => {
         props.districts.forEach((existingDistrict) => {
             const polygon = geometryContext.addPolygon(existingDistrict.id, existingDistrict.coords);
             polygon.onClick(onPolygonClick)
-        }); 
+        });
     }, []);
 
     React.useEffect(() => {
@@ -82,9 +83,14 @@ const DistrictEditor = (props: IDistrictEditor) => {
     }, [])
 
     return (
-        <Marker position={markerPos} ref={markerRef}>
+        <Marker icon={icon} position={markerPos} ref={markerRef}>
             <Popup minWidth={200}>
-                <Input value={districtName} onChange={onDistrictNameChange} />
+                <Input
+                    style={{ marginBottom: "13px" }}
+                    value={districtName}
+                    onChange={onDistrictNameChange}
+                />
+                <Button type="primary" size="small">Сохранить</Button>
             </Popup>
         </Marker>
     )

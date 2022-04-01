@@ -1,4 +1,4 @@
-export class PaletteEditor {
+export class Palette {
   private readonly palette: string[];
   private usedColors: string[];
 
@@ -25,6 +25,5 @@ export class PaletteEditor {
   public returnColor = (color: string): void => {
     let colorIndex = this.usedColors.indexOf(color);
     if (colorIndex !== -1) this.usedColors.splice(colorIndex, 1);
-    console.log(this.usedColors);
   }
 }
