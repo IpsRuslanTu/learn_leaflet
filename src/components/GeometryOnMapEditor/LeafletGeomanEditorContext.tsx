@@ -75,7 +75,7 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
         this.subcribeOnPolygonEdit(polygon);
         this.subscribeOnPolygonDelete(polygon);
 
-        return new Polygon(polygon, id);
+        return new Polygon(polygon, id, coords);
     }
 
     public onPolygonCreate(action: (polygon: Polygon) => void): void {
@@ -122,7 +122,7 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
             const coordsLatLng: LatLngExpression = geomanLayer.getLatLngs()[0];
             const geocodeCoords: Geocode[] = this.latLngToGeocode(coordsLatLng);
             this.polygonIdMap[geomanId] = -geomanId;
-            const polygon = new Polygon(geomanLayer, -geomanId);
+            const polygon = new Polygon(geomanLayer, -geomanId, geocodeCoords);
             this.polygonCreateActions.forEach((a) => a(polygon));
 
             this.subcribeOnPolygonEdit(geomanLayer);

@@ -69,7 +69,7 @@ const DistrictEditor = (props: IDistrictEditor) => {
 
     React.useEffect(() => {
         geometryContext.onPolygonCreate((polygon: Polygon) => {
-            props.addDistrict(polygon.getId(), []);
+            props.addDistrict(polygon.getId(), polygon.getCoordinates());
             polygon.onClick(onPolygonClick);
         });
 
