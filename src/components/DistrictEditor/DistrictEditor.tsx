@@ -9,8 +9,9 @@ import { Polygon } from '../GeometryOnMapEditor/models/Polygon'
 import Title from './Title'
 import { observer } from 'mobx-react'
 import { District } from './DistrictType'
+import { DistrictStore } from '../../store/DistrictStore'
 
-const DistrictEditor = observer((store: any) => {
+const DistrictEditor = observer((districtStore: DistrictStore) => {
     const geometryContext = React.useContext(GeometryContext);
     if (!geometryContext) {
         throw new Error("Geometry context is undefined")
@@ -24,7 +25,7 @@ const DistrictEditor = observer((store: any) => {
     const onDistrictNameChange = React.useCallback((e: any) => {
         setDistrictName(e.target.value);
         if (selectedDistrictId) {
-            store.changeDistrictName(selectedDistrictId, e.target.value);
+            districtStore.changeDistrictName(selectedDistrictId, e.target.value);
         }
     }, [selectedDistrictId]);
 
@@ -36,13 +37,13 @@ const DistrictEditor = observer((store: any) => {
     React.useEffect(() => {
         if (!selectedDistrictId) return;
 
-        const district = store.districts.find((x: District) => x.id === selectedDistrictId)
+        const district = districtStore.districts.find((x: District) => x.id === selectedDistrictId)
 
         if (!district) return;
 
         setDistrictName(district.districtName);
         markerRef.current?.openPopup();
-    }, [selectedDistrictId, store.districts, markerPos]);
+    }, [selectedDistrictId, districtStore.districts, markerPos]);
 
     React.useEffect(() => {
         geometryContext.setSelfIntersection(false);
@@ -52,7 +53,7 @@ const DistrictEditor = observer((store: any) => {
     }, []);
 
     React.useEffect(() => {
-        store.districts.forEach((existingDistrict: District) => {
+        districtStore.districts.forEach((existingDistrict: District) => {
             const polygon = geometryContext.addPolygon(existingDistrict.id, existingDistrict.coords);
             polygon.onClick(onPolygonClick)
         });
@@ -60,16 +61,16 @@ const DistrictEditor = observer((store: any) => {
 
     React.useEffect(() => {
         geometryContext.onPolygonCreate((polygon: Polygon) => {
-            store.addDistrict(polygon.getId(), polygon.getCoordinates());
+            districtStore.addDistrict(polygon.getId(), polygon.getCoordinates());
             polygon.onClick(onPolygonClick);
         });
 
         geometryContext.onPolygonEdit((id: number, coords: Geocode[]) => {
-            store.editDistrict(id, coords);
+            districtStore.editDistrict(id, coords);
         })
 
         geometryContext.onPolygonDelete((id: number) => {
-            store.removeDistrict(id);
+            districtStore.removeDistrict(id);
         });
     }, [])
 
