@@ -12,7 +12,6 @@ export const GeometryContext = React.createContext<GeometryOnMapEditorInterface 
 const GeometryOnMapEditorProvider = (props: IGeometryOnMapEditorProviderProps) => {
     const context: LeafletContextInterface = useLeafletContext();
     const mapContainer: any = context.layerContainer || context.map;
-
     const geometryContext = React.useMemo(() => new LeafletGeomanEditorContext(mapContainer), [mapContainer]);
 
     return (

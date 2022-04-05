@@ -4,20 +4,13 @@ import "@geoman-io/leaflet-geoman-free"
 import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css"
 import { GeometryContext } from '../GeometryOnMapEditor/GeometryOnMapEditorProvider'
 import { Geocode } from '../../models/Geocode'
-import { District } from './DistrictType'
 import L, { LatLngExpression } from 'leaflet'
 import { Polygon } from '../GeometryOnMapEditor/models/Polygon'
 import Title from './Title'
+import { observer } from 'mobx-react'
+import { District } from './DistrictType'
 
-interface IDistrictEditor {
-    districts: District[];
-    addDistrict: (id: number, newCoords: Geocode[]) => void;
-    editDistrict: (id: number, newCoords: Geocode[]) => void;
-    removeDistrict: (id: number) => void;
-    changeDistrictName: (id: number, name: string) => void;
-}
-
-const DistrictEditor = (props: IDistrictEditor) => {
+const DistrictEditor = observer((store: any) => {
     const geometryContext = React.useContext(GeometryContext);
     if (!geometryContext) {
         throw new Error("Geometry context is undefined")
@@ -31,7 +24,7 @@ const DistrictEditor = (props: IDistrictEditor) => {
     const onDistrictNameChange = React.useCallback((e: any) => {
         setDistrictName(e.target.value);
         if (selectedDistrictId) {
-            props.changeDistrictName(selectedDistrictId, e.target.value);
+            store.changeDistrictName(selectedDistrictId, e.target.value);
         }
     }, [selectedDistrictId]);
 
@@ -43,13 +36,13 @@ const DistrictEditor = (props: IDistrictEditor) => {
     React.useEffect(() => {
         if (!selectedDistrictId) return;
 
-        const district = props.districts.find((x) => x.id === selectedDistrictId)
+        const district = store.districts.find((x: District) => x.id === selectedDistrictId)
 
         if (!district) return;
 
         setDistrictName(district.districtName);
         markerRef.current?.openPopup();
-    }, [selectedDistrictId, props.districts, markerPos]);
+    }, [selectedDistrictId, store.districts, markerPos]);
 
     React.useEffect(() => {
         geometryContext.setSelfIntersection(false);
@@ -59,7 +52,7 @@ const DistrictEditor = (props: IDistrictEditor) => {
     }, []);
 
     React.useEffect(() => {
-        props.districts.forEach((existingDistrict) => {
+        store.districts.forEach((existingDistrict: District) => {
             const polygon = geometryContext.addPolygon(existingDistrict.id, existingDistrict.coords);
             polygon.onClick(onPolygonClick)
         });
@@ -67,16 +60,16 @@ const DistrictEditor = (props: IDistrictEditor) => {
 
     React.useEffect(() => {
         geometryContext.onPolygonCreate((polygon: Polygon) => {
-            props.addDistrict(polygon.getId(), polygon.getCoordinates());
+            store.addDistrict(polygon.getId(), polygon.getCoordinates());
             polygon.onClick(onPolygonClick);
         });
 
         geometryContext.onPolygonEdit((id: number, coords: Geocode[]) => {
-            props.editDistrict(id, coords);
+            store.editDistrict(id, coords);
         })
 
         geometryContext.onPolygonDelete((id: number) => {
-            props.removeDistrict(id);
+            store.removeDistrict(id);
         });
     }, [])
 
@@ -88,6 +81,6 @@ const DistrictEditor = (props: IDistrictEditor) => {
             onDistrictNameChange={onDistrictNameChange}
         />
     )
-}
+})
 
 export default DistrictEditor;

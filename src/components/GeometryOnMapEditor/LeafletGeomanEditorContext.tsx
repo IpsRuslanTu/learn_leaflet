@@ -1,5 +1,6 @@
 import * as L from "leaflet";
 import { LatLngExpression } from "leaflet";
+import { makeAutoObservable } from "mobx";
 import { Geocode } from "../../models/Geocode";
 import { GeometryOnMapEditorInterface } from "./GeometryOnMapEditorInterface";
 import { Palette } from './models/Palette';
@@ -14,6 +15,7 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
     private palette: Palette;
 
     public constructor(mapContainer: any) {
+        makeAutoObservable(this)
         this.mapContainer = mapContainer;
         this.mapContainer.pm.addControls({
             position: 'topright',
