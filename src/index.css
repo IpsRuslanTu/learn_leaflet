@@ -29,6 +29,8 @@ code {
 
 .data-item {
   margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .leaflet-div-icon {

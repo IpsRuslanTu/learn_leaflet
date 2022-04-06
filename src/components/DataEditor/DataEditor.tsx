@@ -5,9 +5,6 @@ import { District } from "../DistrictEditor/DistrictType"
 
 const DataEditor = observer((districtStore: DistrictStore) => {
   const districts = districtStore.districts;
-  const handleChange = (index: number, e: ChangeEvent<HTMLInputElement>) => {
-    districtStore.renameDistrict(index, e.target.value)
-  }
 
   return (
     <div className="data-editor">
@@ -15,7 +12,15 @@ const DataEditor = observer((districtStore: DistrictStore) => {
       {districts.map((district: District, index: number) => {
         return (
           <div className="data-item" key={districts[index].id}>
-            <input value={districts[index].districtName} onChange={(e) => handleChange(index, e)} />
+            <input
+              value={districts[index].districtName}
+              onChange={(e) => districtStore.changeDistrictName(district.id, e.target.value)}
+            />
+            <button
+              onClick={() => districtStore.removeDistrict(district.id)}
+            >
+              X
+            </button>
           </div>
         )
       })}

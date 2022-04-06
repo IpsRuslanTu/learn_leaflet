@@ -27,9 +27,9 @@ export class DistrictStore {
     this.districts[index].districtName = name;
   }
 
-  renameDistrict = (index: number, value: string) => {
-    this.districts[index].districtName = value;
-  }
+  // renameDistrictOnList = (index: number, value: string) => {
+  //   this.districts[index].districtName = value;
+  // }
 }
 
 export const districtStore = new DistrictStore();
