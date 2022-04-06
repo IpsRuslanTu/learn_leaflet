@@ -13,10 +13,22 @@ code {
 }
 
 .App {
-  width: 1000px; 
+  width: 90vw; 
   height: 500px; 
   margin: 0 auto; 
   padding: 20px;
+  display: flex;
+}
+
+.data-editor {
+  flex: 1 1 35%;
+  border: 1px black solid;
+  margin-right: 20px;
+  padding: 10px;
+}
+
+.data-item {
+  margin-bottom: 10px;
 }
 
 .leaflet-div-icon {
