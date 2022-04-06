@@ -92,6 +92,10 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
         this.polygonDeleteActions.push(action);
     }
 
+    public showLayersTest() {
+        console.log(this.mapContainer);
+    }
+
     private latLngToGeocode(arrLatLng: any): Geocode[] {
         const geocode: Geocode[] = arrLatLng.map((item: any) => ({ lat: item.lat, lng: item.lng }))
         return geocode;

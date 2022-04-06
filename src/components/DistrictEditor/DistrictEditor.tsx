@@ -27,6 +27,7 @@ const DistrictEditor = observer((districtStore: DistrictStore) => {
         if (selectedDistrictId) {
             districtStore.changeDistrictName(selectedDistrictId, e.target.value);
         }
+        geometryContext.showLayersTest();
     }, [selectedDistrictId]);
 
     const onPolygonClick = React.useCallback((e: any, districtId: number) => {

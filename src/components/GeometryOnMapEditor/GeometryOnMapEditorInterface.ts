@@ -19,4 +19,6 @@ export interface GeometryOnMapEditorInterface {
     enableDeleting: () => void;
 
     getPolygonIdByLeafletId(leafletId: number): number;
+
+    showLayersTest: () => void;
 }

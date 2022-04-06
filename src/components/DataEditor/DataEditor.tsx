@@ -1,9 +1,10 @@
 import { observer } from "mobx-react"
-import React, { ChangeEvent } from "react"
+import React from "react"
 import { DistrictStore } from "../../store/DistrictStore"
 import { District } from "../DistrictEditor/DistrictType"
 
 const DataEditor = observer((districtStore: DistrictStore) => {
+
   const districts = districtStore.districts;
 
   return (
@@ -16,9 +17,7 @@ const DataEditor = observer((districtStore: DistrictStore) => {
               value={districts[index].districtName}
               onChange={(e) => districtStore.changeDistrictName(district.id, e.target.value)}
             />
-            <button
-              onClick={() => districtStore.removeDistrict(district.id)}
-            >
+            <button onClick={() => districtStore.removeDistrict(district.id)}>
               X
             </button>
           </div>
