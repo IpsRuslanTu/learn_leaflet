@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react';
-import DataEditor from './components/DataEditor/DataEditor';
+import DistrictListEditor from './components/DistrictListEditor/DistrictListEditor';
 import DistrictEditor from './components/DistrictEditor/DistrictEditor'
 import GeometryOnMapEditor from './components/GeometryOnMapEditor/GeometryOnMapEditor'
 import { YOLA } from './constants/positions'
@@ -13,7 +13,7 @@ const App = () => {
   return (
     <>
       <div className='App'>
-        <DataEditor {...districtStore} />
+        <DistrictListEditor {...districtStore} />
         <GeometryOnMapEditor area={YOLA} zoomValue={11} >
           <DistrictEditor {...districtStore} />
         </GeometryOnMapEditor>

@@ -3,7 +3,7 @@ import React from "react"
 import { DistrictStore } from "../../store/DistrictStore"
 import { District } from "../DistrictEditor/DistrictType"
 
-const DataEditor = observer((districtStore: DistrictStore) => {
+const DistrictListEditor = observer((districtStore: DistrictStore) => {
 
   const districts = districtStore.districts;
 
@@ -15,6 +15,7 @@ const DataEditor = observer((districtStore: DistrictStore) => {
           <div className="data-item" key={districts[index].id}>
             <input
               value={districts[index].districtName}
+              placeholder="Введите название"
               onChange={(e) => districtStore.changeDistrictName(district.id, e.target.value)}
             />
             <button onClick={() => districtStore.removeDistrict(district.id)}>
@@ -27,4 +28,4 @@ const DataEditor = observer((districtStore: DistrictStore) => {
   )
 })
 
-export default DataEditor
+export default DistrictListEditor

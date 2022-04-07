@@ -1,6 +1,5 @@
 import * as L from "leaflet";
 import { LatLngExpression } from "leaflet";
-import { makeAutoObservable } from "mobx";
 import { Geocode } from "../../models/Geocode";
 import { GeometryOnMapEditorInterface } from "./GeometryOnMapEditorInterface";
 import { Palette } from './models/Palette';
@@ -15,7 +14,6 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
     private palette: Palette;
 
     public constructor(mapContainer: any) {
-        makeAutoObservable(this)
         this.mapContainer = mapContainer;
         this.mapContainer.pm.addControls({
             position: 'topright',
@@ -92,8 +90,13 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
         this.polygonDeleteActions.push(action);
     }
 
-    public showLayersTest() {
-        console.log(this.mapContainer);
+    public deleteLayer(id: number) {
+        const leafletId = this.getLeafletIdByPoligonId(id);
+        this.mapContainer.eachLayer((layer: any) => {
+            if (layer._leaflet_id === leafletId) {
+                this.mapContainer.removeLayer(layer);
+            }
+        })
     }
 
     private latLngToGeocode(arrLatLng: any): Geocode[] {
@@ -113,6 +116,10 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
             throw new Error("leafletId not in polygonIdMap")
         }
         return this.polygonIdMap[leafletId];
+    }
+
+    private getLeafletIdByPoligonId(id: number): number {
+        return Number(Object.keys(this.polygonIdMap).find((key: any) => this.polygonIdMap[key] === id));
     }
 
     private subscribeOnPolygonCreate() {

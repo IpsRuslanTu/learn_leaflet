@@ -6,7 +6,7 @@ import { GeometryContext } from '../GeometryOnMapEditor/GeometryOnMapEditorProvi
 import { Geocode } from '../../models/Geocode'
 import L, { LatLngExpression } from 'leaflet'
 import { Polygon } from '../GeometryOnMapEditor/models/Polygon'
-import Title from './Title'
+import DistrictPopup from './DistrictPopup'
 import { observer } from 'mobx-react'
 import { District } from './DistrictType'
 import { DistrictStore } from '../../store/DistrictStore'
@@ -27,7 +27,6 @@ const DistrictEditor = observer((districtStore: DistrictStore) => {
         if (selectedDistrictId) {
             districtStore.changeDistrictName(selectedDistrictId, e.target.value);
         }
-        geometryContext.showLayersTest();
     }, [selectedDistrictId]);
 
     const onPolygonClick = React.useCallback((e: any, districtId: number) => {
@@ -58,6 +57,10 @@ const DistrictEditor = observer((districtStore: DistrictStore) => {
             const polygon = geometryContext.addPolygon(existingDistrict.id, existingDistrict.coords);
             polygon.onClick(onPolygonClick)
         });
+
+        districtStore.onDistrictRemove((id: number) => {
+            geometryContext.deleteLayer(id);
+        })
     }, []);
 
     React.useEffect(() => {
@@ -76,7 +79,7 @@ const DistrictEditor = observer((districtStore: DistrictStore) => {
     }, [])
 
     return (
-        <Title
+        <DistrictPopup
             markerPos={markerPos}
             markerRef={markerRef}
             districtName={districtName}

@@ -1,17 +1,24 @@
 import { Button, Input } from "antd"
 import { LatLngExpression } from "leaflet";
+import React from "react";
 import { Marker, Popup } from "react-leaflet"
 import { icon } from './Icon/Icon'
 
-interface ITitle {
+interface IDistrictPopup {
   markerPos: LatLngExpression;
   markerRef: any;
   districtName: string | undefined;
   onDistrictNameChange: (e: any) => void;
 }
 
-const Title = (props: ITitle) => {
-  const closeTitle = () => {
+const DistrictPopup = (props: IDistrictPopup) => {
+  let mode = props.districtName === "" ? true : false;
+
+  const cancel = () => {
+    props.markerRef.current.closePopup();
+  }
+
+  const save = () => {
     props.markerRef.current.closePopup();
   }
 
@@ -24,10 +31,13 @@ const Title = (props: ITitle) => {
             value={props.districtName}
             onChange={props.onDistrictNameChange}
           />
-          <Button type="primary" size="small" onClick={closeTitle}>Сохранить</Button>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Button type="default" size="small" onClick={cancel}>Отмена</Button>
+            <Button type="primary" size="small" disabled={mode} onClick={save}>Сохранить</Button>
+          </div>
         </Popup>
       </Marker>
     </>
   )
 }
-export default Title
+export default DistrictPopup

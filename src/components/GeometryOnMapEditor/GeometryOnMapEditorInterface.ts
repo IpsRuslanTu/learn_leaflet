@@ -20,5 +20,5 @@ export interface GeometryOnMapEditorInterface {
 
     getPolygonIdByLeafletId(leafletId: number): number;
 
-    showLayersTest: () => void;
+    deleteLayer: (id: number) => void;
 }
