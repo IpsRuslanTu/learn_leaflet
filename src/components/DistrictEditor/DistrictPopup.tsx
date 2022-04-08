@@ -13,7 +13,7 @@ interface IDistrictPopup {
 
 const DistrictPopup = (props: IDistrictPopup) => {
 
-  const [originalDistrictName, setOriginalDistrictName] = React.useState<undefined | string>(undefined);
+  const [originalDistrictName, setOriginalDistrictName] = React.useState<undefined | string>('');
   let mode = props.districtName === "" ? true : false;
 
   const cancel = () => {
@@ -25,14 +25,16 @@ const DistrictPopup = (props: IDistrictPopup) => {
     props.markerRef.current.closePopup();
   }
 
-  const testFunc = () => {
+  const testFunc = React.useCallback(() => {
     setOriginalDistrictName(props.districtName);
-  }
+  }, [props.markerPos])
+
+  console.log(originalDistrictName);
 
   return (
     <>
       <Marker icon={icon} position={props.markerPos} ref={props.markerRef}>
-        <Popup minWidth={200} onOpen={testFunc}>
+        <Popup minWidth={200} onOpen={testFunc} closeButton={false}>
           <Input
             style={{ marginBottom: "13px" }}
             value={props.districtName}

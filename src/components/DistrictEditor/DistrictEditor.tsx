@@ -24,9 +24,16 @@ const DistrictEditor = observer((districtStore: DistrictStore) => {
     const markerRef = React.useRef<L.Marker>(null);
 
     const onDistrictNameChange = React.useCallback((e: any) => {
-        setDistrictName(e.target.value);
-        if (selectedDistrictId) {
-            districtStore.changeDistrictName(selectedDistrictId, e.target.value);
+        if (typeof e === "string") {
+            setDistrictName(e);
+            if (selectedDistrictId) {
+                districtStore.changeDistrictName(selectedDistrictId, e);
+            }
+        } else {
+            setDistrictName(e.target.value);
+            if (selectedDistrictId) {
+                districtStore.changeDistrictName(selectedDistrictId, e.target.value);
+            }
         }
     }, [selectedDistrictId]);
 

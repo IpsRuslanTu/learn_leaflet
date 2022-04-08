@@ -18,7 +18,7 @@ const App = () => {
           <DistrictEditor {...districtStore} />
         </GeometryOnMapEditor>
       </div>
-      <Debug {...districtStore} />
+      {/* <Debug {...districtStore} /> */}
     </>
   )
 }

@@ -1,9 +1,9 @@
 import { makeAutoObservable } from "mobx";
-import { testDistrict, testDistrict2 } from "../constants/testDistrict";
+import { testDistrict, testDistrict2, testDistrict3 } from "../constants/testDistrict";
 import { Geocode } from "../models/Geocode";
 
 export class DistrictStore {
-  districts = [testDistrict, testDistrict2];
+  districts = [testDistrict, testDistrict2, testDistrict3];
   districtDeleteActions: ((id: number) => void)[];
 
   constructor() {
