@@ -1,6 +1,7 @@
 import * as L from "leaflet";
 import { LatLngExpression } from "leaflet";
 import { Geocode } from "../../models/Geocode";
+import { MapMode } from "../../models/MapMode";
 import { GeometryOnMapEditorInterface } from "./GeometryOnMapEditorInterface";
 import { Palette } from './models/Palette';
 import { Polygon } from "./models/Polygon";
@@ -12,6 +13,7 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
     private readonly polygonDeleteActions: ((id: number) => void)[];
     private readonly polygonIdMap: { [id: number]: number };
     private palette: Palette;
+    private mapMode: MapMode;
 
     public constructor(mapContainer: any) {
         this.mapContainer = mapContainer;
@@ -34,6 +36,7 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
         this.polygonDeleteActions = [];
         this.polygonIdMap = {};
         this.palette = new Palette();
+        this.mapMode = MapMode.normalMode;
     }
 
     public setSelfIntersection(selfIntersection: boolean) {
@@ -60,6 +63,16 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
         this.mapContainer.pm.addControls({
             removalMode: true
         })
+    }
+
+    public onMapMode() {
+        this.mapContainer.on('pm:globalremovalmodetoggled', (e: any) => {
+            this.mapMode = e.enabled ? MapMode.deleteMode : MapMode.normalMode;
+        });
+    }
+
+    public getCurrentMapMode() {
+        return this.mapMode;
     }
 
     public addPolygon(id: number, coords: Geocode[]): Polygon {

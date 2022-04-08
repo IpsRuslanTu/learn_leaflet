@@ -1,0 +1,1 @@
+export enum MapMode { normalMode = "normalMode", deleteMode = "deleteMode" };

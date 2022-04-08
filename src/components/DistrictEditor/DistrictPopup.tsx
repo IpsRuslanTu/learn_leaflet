@@ -12,6 +12,7 @@ interface IDistrictPopup {
 }
 
 const DistrictPopup = (props: IDistrictPopup) => {
+
   let mode = props.districtName === "" ? true : false;
 
   const cancel = () => {

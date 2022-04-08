@@ -10,6 +10,7 @@ import DistrictPopup from './DistrictPopup'
 import { observer } from 'mobx-react'
 import { District } from './DistrictType'
 import { DistrictStore } from '../../store/DistrictStore'
+import { MapMode } from '../../models/MapMode'
 
 const DistrictEditor = observer((districtStore: DistrictStore) => {
     const geometryContext = React.useContext(GeometryContext);
@@ -50,6 +51,7 @@ const DistrictEditor = observer((districtStore: DistrictStore) => {
         geometryContext.enablePolygonDraw();
         geometryContext.enableEditing();
         geometryContext.enableDeleting();
+        geometryContext.onMapMode();
     }, []);
 
     React.useEffect(() => {
@@ -78,14 +80,17 @@ const DistrictEditor = observer((districtStore: DistrictStore) => {
         });
     }, [])
 
-    return (
-        <DistrictPopup
-            markerPos={markerPos}
-            markerRef={markerRef}
-            districtName={districtName}
-            onDistrictNameChange={onDistrictNameChange}
-        />
-    )
+    if (geometryContext.getCurrentMapMode() === MapMode.normalMode) {
+        return (
+            <DistrictPopup
+                markerPos={markerPos}
+                markerRef={markerRef}
+                districtName={districtName}
+                onDistrictNameChange={onDistrictNameChange}
+            />
+        )
+    }
+    else return null;
 })
 
 export default DistrictEditor;
