@@ -1,18 +1,20 @@
 import { makeAutoObservable } from "mobx";
+import { District } from "../components/DistrictEditor/District";
 import { testDistrict, testDistrict2, testDistrict3 } from "../constants/testDistrict";
 import { Geocode } from "../models/Geocode";
 
 export class DistrictStore {
-  districts = [testDistrict, testDistrict2, testDistrict3];
+  districts: District[] = [];
   districtDeleteActions: ((id: number) => void)[];
 
   constructor() {
     makeAutoObservable(this);
     this.districtDeleteActions = [];
+    this.districts.push(new District(testDistrict.id, testDistrict.coords, testDistrict.districtName));
   }
 
   addDistrict = (id: number, coords: Geocode[]): void => {
-    this.districts.push({ id: id, coords: coords, districtName: "" })
+    this.districts.push(new District(id, coords, ""));
   }
 
   editDistrict = (id: number, newCoords: Geocode[]): void => {

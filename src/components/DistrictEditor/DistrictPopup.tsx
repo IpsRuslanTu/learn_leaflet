@@ -1,5 +1,6 @@
 import { Button, Input } from "antd"
 import { LatLngExpression } from "leaflet";
+import { observer } from "mobx-react";
 import React from "react";
 import { Marker, Popup } from "react-leaflet"
 import { icon } from './Icon/Icon'
@@ -11,7 +12,7 @@ interface IDistrictPopup {
   onDistrictNameChange: (e: any) => void;
 }
 
-const DistrictPopup = (props: IDistrictPopup) => {
+const DistrictPopup = observer((props: IDistrictPopup) => {
 
   const [originalDistrictName, setOriginalDistrictName] = React.useState<undefined | string>('');
   let mode = props.districtName === "" ? true : false;
@@ -48,5 +49,6 @@ const DistrictPopup = (props: IDistrictPopup) => {
       </Marker>
     </>
   )
-}
+})
+
 export default DistrictPopup

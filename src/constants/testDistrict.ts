@@ -1,6 +1,6 @@
-import { District } from "../components/DistrictEditor/DistrictType";
+import { District } from "../components/DistrictEditor/District";
 
-export const testDistrict: District = {
+export const testDistrict = {
   id: 555,
   coords: [
     { lat: 56.60070456409795, lng: 47.70057678222655 },
@@ -11,7 +11,7 @@ export const testDistrict: District = {
   districtName: 'Вася'
 }
 
-export const testDistrict2: District = {
+export const testDistrict2 = {
   id: 444,
   coords: [
     { lat: 56.60864126990595, lng: 47.82577514299195 },
@@ -21,7 +21,7 @@ export const testDistrict2: District = {
   districtName: 'Петя'
 }
 
-export const testDistrict3: District = {
+export const testDistrict3 = {
   id: 333,
   coords: [
     { lat: 56.566040686302564, lng: 47.735603047634925 },

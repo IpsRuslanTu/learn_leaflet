@@ -1,11 +1,15 @@
 import { observer } from "mobx-react"
 import React from "react"
 import { DistrictStore } from "../../store/DistrictStore"
-import { District } from "../DistrictEditor/DistrictType"
+import { District } from "./District"
 
-const DistrictListEditor = observer((districtStore: DistrictStore) => {
+interface DistrictListEditorProps {
+  districtStore: DistrictStore;
+}
 
-  const districts = districtStore.districts;
+const DistrictListEditor = observer((props: DistrictListEditorProps) => {
+
+  const districts = props.districtStore.districts;
 
   return (
     <div className="data-editor">
@@ -16,9 +20,9 @@ const DistrictListEditor = observer((districtStore: DistrictStore) => {
             <input
               value={districts[index].districtName}
               placeholder="Введите название"
-              onChange={(e) => districtStore.changeDistrictName(district.id, e.target.value)}
+              onChange={(e) => props.districtStore.changeDistrictName(district.id, e.target.value)}
             />
-            <button onClick={() => districtStore.removeDistrict(district.id)}>
+            <button onClick={() => props.districtStore.removeDistrict(district.id)}>
               X
             </button>
           </div>
