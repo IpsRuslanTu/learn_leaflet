@@ -10,7 +10,7 @@ export class District {
     makeAutoObservable(this);
     this.id = id;
     this.coords = coords;
-    this._districtName = _districtName || "";
+    this._districtName = _districtName;
   }
 
   get districtName(): string {

@@ -14,7 +14,7 @@ import { MapMode } from '../../models/MapMode'
 
 interface DistrictEditorProps {
     districtStore: DistrictStore;
-  }
+}
 
 const DistrictEditor = observer((props: DistrictEditorProps) => {
     const geometryContext = React.useContext(GeometryContext);
@@ -22,17 +22,10 @@ const DistrictEditor = observer((props: DistrictEditorProps) => {
         throw new Error("Geometry context is undefined")
     }
 
+    const [selectedDistrict, setSelectedDistrict] = React.useState<District | undefined>(undefined);
     const [selectedDistrictId, setSelectedDistrictId] = React.useState<number | undefined>(undefined);
     const [markerPos, setMarkerPos] = React.useState<LatLngExpression>([56.631124, 47.894478]);
-    const [districtName, setDistrictName] = React.useState<string | undefined>(undefined);
     const markerRef = React.useRef<L.Marker>(null);
-
-    const onDistrictNameChange = React.useCallback((name: string) => {
-        setDistrictName(name);
-        if (selectedDistrictId) {
-            props.districtStore.changeDistrictName(selectedDistrictId, name);
-        }
-    }, [selectedDistrictId]);
 
     const onPolygonClick = React.useCallback((e: any, districtId: number) => {
         setSelectedDistrictId(districtId);
@@ -44,11 +37,12 @@ const DistrictEditor = observer((props: DistrictEditorProps) => {
 
         const district = props.districtStore.districts.find((x: District) => x.id === selectedDistrictId)
 
+        setSelectedDistrict(district);
+
         if (!district) return;
 
-        setDistrictName(district.districtName);
         markerRef.current?.openPopup();
-    }, [selectedDistrictId, props.districtStore.districts, markerPos]);
+    }, [selectedDistrictId, markerPos]);
 
     React.useEffect(() => {
         geometryContext.setSelfIntersection(false);
@@ -84,13 +78,13 @@ const DistrictEditor = observer((props: DistrictEditorProps) => {
         });
     }, [])
 
-    if (geometryContext.getCurrentMapMode() === MapMode.normalMode) {
+    if (geometryContext.getCurrentMapMode() === MapMode.normalMode
+        && selectedDistrict !== undefined) {
         return (
             <DistrictPopup
                 markerPos={markerPos}
                 markerRef={markerRef}
-                districtName={districtName}
-                onDistrictNameChange={onDistrictNameChange}
+                district={selectedDistrict}
             />
         )
     }

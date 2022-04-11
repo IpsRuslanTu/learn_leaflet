@@ -1,6 +1,6 @@
 import { makeAutoObservable } from "mobx";
 import { District } from "../components/DistrictEditor/District";
-import { testDistrict, testDistrict2, testDistrict3 } from "../constants/testDistrict";
+import { testDistrict } from "../constants/testDistrict";
 import { Geocode } from "../models/Geocode";
 
 export class DistrictStore {

@@ -1,36 +1,37 @@
-import { Button, Input } from "antd"
+import { Button, Input } from "antd";
 import { LatLngExpression } from "leaflet";
 import { observer } from "mobx-react";
-import React from "react";
-import { Marker, Popup } from "react-leaflet"
+import React, { ChangeEvent } from "react";
+import { Marker, Popup } from "react-leaflet";
+import { District } from "./District";
 import { icon } from './Icon/Icon'
 
-interface IDistrictPopup {
+interface IDistrictPopupProps {
   markerPos: LatLngExpression;
   markerRef: any;
-  districtName: string | undefined;
-  onDistrictNameChange: (e: any) => void;
+  district: District;
 }
 
-const DistrictPopup = observer((props: IDistrictPopup) => {
+const DistrictPopup = observer((props: IDistrictPopupProps) => {
+  const [originalDistrictName, setOriginalDistrictName] = React.useState<string>('');
+  let mode = props.district.districtName === "" ? true : false;
 
-  const [originalDistrictName, setOriginalDistrictName] = React.useState<undefined | string>('');
-  let mode = props.districtName === "" ? true : false;
-
-  const cancel = () => {
+  const onCancel = () => {
     props.markerRef.current.closePopup();
-    props.onDistrictNameChange(originalDistrictName);
+    props.district.districtName = originalDistrictName;
   }
 
-  const save = () => {
+  const onSave = () => {
     props.markerRef.current.closePopup();
   }
 
   const testFunc = React.useCallback(() => {
-    setOriginalDistrictName(props.districtName);
+    setOriginalDistrictName(props.district.districtName);
   }, [props.markerPos])
 
-  console.log(originalDistrictName);
+  const renameDistrict = (e: ChangeEvent<HTMLInputElement>) => {
+    props.district.districtName = e.target.value;
+  }
 
   return (
     <>
@@ -38,12 +39,12 @@ const DistrictPopup = observer((props: IDistrictPopup) => {
         <Popup minWidth={200} onOpen={testFunc} closeButton={false}>
           <Input
             style={{ marginBottom: "13px" }}
-            value={props.districtName}
-            onChange={props.onDistrictNameChange}
+            value={props.district.districtName}
+            onChange={renameDistrict}
           />
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Button type="default" size="small" onClick={cancel}>Отмена</Button>
-            <Button type="primary" size="small" disabled={mode} onClick={save}>Сохранить</Button>
+            <Button type="default" size="small" onClick={onCancel}>Отмена</Button>
+            <Button type="primary" size="small" disabled={mode} onClick={onSave}>Сохранить</Button>
           </div>
         </Popup>
       </Marker>
