@@ -4,7 +4,7 @@ import "@geoman-io/leaflet-geoman-free"
 import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css"
 import { GeometryContext } from '../GeometryOnMapEditor/GeometryOnMapEditorProvider'
 import { Geocode } from '../../models/Geocode'
-import L, { LatLngExpression } from 'leaflet'
+import { LatLngExpression } from 'leaflet'
 import { Polygon } from '../GeometryOnMapEditor/models/Polygon'
 import DistrictPopup from './DistrictPopup'
 import { observer } from 'mobx-react'
@@ -22,14 +22,15 @@ const DistrictEditor = observer((props: DistrictEditorProps) => {
         throw new Error("Geometry context is undefined")
     }
 
+    // const [popupVisible, setPopupVisible] = React.useState<boolean>(false);
     const [selectedDistrict, setSelectedDistrict] = React.useState<District | undefined>(undefined);
     const [selectedDistrictId, setSelectedDistrictId] = React.useState<number | undefined>(undefined);
     const [markerPos, setMarkerPos] = React.useState<LatLngExpression>([56.631124, 47.894478]);
-    const markerRef = React.useRef<L.Marker>(null);
 
     const onPolygonClick = React.useCallback((e: any, districtId: number) => {
         setSelectedDistrictId(districtId);
         setMarkerPos(e.latlng);
+        // setPopupVisible(true);
     }, [])
 
     React.useEffect(() => {
@@ -41,7 +42,6 @@ const DistrictEditor = observer((props: DistrictEditorProps) => {
 
         if (!district) return;
 
-        markerRef.current?.openPopup();
     }, [selectedDistrictId, props.districtStore.districts, markerPos]);
 
     React.useEffect(() => {
@@ -49,7 +49,6 @@ const DistrictEditor = observer((props: DistrictEditorProps) => {
         geometryContext.enablePolygonDraw();
         geometryContext.enableEditing();
         geometryContext.enableDeleting();
-        // geometryContext.onMapMode();
     }, []);
 
     React.useEffect(() => {
@@ -83,7 +82,7 @@ const DistrictEditor = observer((props: DistrictEditorProps) => {
         return (
             <DistrictPopup
                 position={markerPos}
-                visible={markerRef}
+                // visible={popupVisible}
                 district={selectedDistrict}
             />
         )

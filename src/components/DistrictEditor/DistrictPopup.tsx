@@ -1,5 +1,5 @@
 import { Button, Input } from 'antd';
-import { LatLngExpression } from 'leaflet';
+import L, { LatLngExpression } from 'leaflet';
 import { observer } from 'mobx-react';
 import React, { ChangeEvent } from 'react';
 import { Marker, Popup } from 'react-leaflet';
@@ -9,11 +9,17 @@ import './districtEditor.css';
 
 interface IDistrictPopupProps {
   position: LatLngExpression;
-  visible: any;
+  // visible: boolean;
   district: District;
 }
 
 const DistrictPopup = observer((props: IDistrictPopupProps) => {
+  const markerRef = React.useRef<L.Marker>(null);
+
+  React.useEffect(() => {
+    markerRef.current?.openPopup();
+  }, [props.position])
+
   const [originalDistrictName, setOriginalDistrictName] = React.useState<string>('');
   const [availableSaveButton, setAvailableSaveButton] = React.useState<boolean>(true);
 
@@ -22,13 +28,13 @@ const DistrictPopup = observer((props: IDistrictPopupProps) => {
   }, [props.district.districtName])
 
   const onCancel = React.useCallback(() => {
-    props.visible.current.closePopup();
+    markerRef.current?.closePopup();
     props.district.districtName = originalDistrictName;
-  }, [props.district, props.visible, originalDistrictName])
+  }, [props.district, props.position, originalDistrictName])
 
   const onSave = React.useCallback(() => {
-    props.visible.current.closePopup();
-  }, [props.visible])
+    markerRef.current?.closePopup();
+  }, [props.position])
 
   const saveInitialName = React.useCallback(() => {
     setOriginalDistrictName(props.district.districtName);
@@ -40,7 +46,7 @@ const DistrictPopup = observer((props: IDistrictPopupProps) => {
 
   return (
     <>
-      <Marker icon={icon} position={props.position} ref={props.visible}>
+      <Marker icon={icon} position={props.position} ref={markerRef}>
         <Popup minWidth={200} onOpen={saveInitialName} closeButton={false}>
           <Input
             className='district-popup_input'
