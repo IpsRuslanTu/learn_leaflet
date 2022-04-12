@@ -1,7 +1,7 @@
 import * as L from "leaflet";
 import { LatLngExpression } from "leaflet";
 import { Geocode } from "../../models/Geocode";
-import { MapMode } from "../../models/MapMode";
+import { MapMode } from "./models/MapMode";
 import { GeometryOnMapEditorInterface } from "./GeometryOnMapEditorInterface";
 import { Palette } from './models/Palette';
 import { Polygon } from "./models/Polygon";

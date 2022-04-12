@@ -16,9 +16,9 @@ const DistrictListEditor = observer((props: DistrictListEditorProps) => {
       <h1>Районы:</h1>
       {districts.map((district: District, index: number) => {
         return (
-          <div className="data-item" key={districts[index].id}>
+          <div className="data-item" key={district.id}>
             <input
-              value={districts[index].districtName}
+              value={district.districtName}
               placeholder="Введите название"
               onChange={(e) => props.districtStore.changeDistrictName(district.id, e.target.value)}
             />

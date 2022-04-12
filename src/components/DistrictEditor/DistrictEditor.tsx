@@ -10,7 +10,7 @@ import DistrictPopup from './DistrictPopup'
 import { observer } from 'mobx-react'
 import { District } from './District'
 import { DistrictStore } from '../../store/DistrictStore'
-import { MapMode } from '../../models/MapMode'
+import { MapMode } from '../GeometryOnMapEditor/models/MapMode'
 
 interface DistrictEditorProps {
     districtStore: DistrictStore;
@@ -42,7 +42,7 @@ const DistrictEditor = observer((props: DistrictEditorProps) => {
         if (!district) return;
 
         markerRef.current?.openPopup();
-    }, [selectedDistrictId, markerPos]);
+    }, [selectedDistrictId, props.districtStore.districts, markerPos]);
 
     React.useEffect(() => {
         geometryContext.setSelfIntersection(false);
@@ -82,8 +82,8 @@ const DistrictEditor = observer((props: DistrictEditorProps) => {
         && selectedDistrict !== undefined) {
         return (
             <DistrictPopup
-                markerPos={markerPos}
-                markerRef={markerRef}
+                position={markerPos}
+                visible={markerRef}
                 district={selectedDistrict}
             />
         )
