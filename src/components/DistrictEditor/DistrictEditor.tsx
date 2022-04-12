@@ -49,7 +49,7 @@ const DistrictEditor = observer((props: DistrictEditorProps) => {
         geometryContext.enablePolygonDraw();
         geometryContext.enableEditing();
         geometryContext.enableDeleting();
-        geometryContext.onMapMode();
+        // geometryContext.onMapMode();
     }, []);
 
     React.useEffect(() => {
@@ -78,7 +78,7 @@ const DistrictEditor = observer((props: DistrictEditorProps) => {
         });
     }, [])
 
-    if (geometryContext.getCurrentMapMode() === MapMode.normalMode
+    if (geometryContext.getCurrentMapMode() !== MapMode.deleteMode
         && selectedDistrict !== undefined) {
         return (
             <DistrictPopup

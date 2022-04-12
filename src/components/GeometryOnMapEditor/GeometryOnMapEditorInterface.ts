@@ -22,7 +22,7 @@ export interface GeometryOnMapEditorInterface {
 
     deleteLayer: (id: number) => void;
 
-    onMapMode: () => void;
+    // onMapMode: () => void;
 
     getCurrentMapMode: () => string;
 }

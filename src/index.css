@@ -20,19 +20,6 @@ code {
   display: flex;
 }
 
-.data-editor {
-  flex: 1 1 35%;
-  border: 1px black solid;
-  margin-right: 20px;
-  padding: 10px;
-}
-
-.data-item {
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: space-between;
-}
-
 .leaflet-div-icon {
   background: none;
   border: none;

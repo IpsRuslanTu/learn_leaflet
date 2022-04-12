@@ -1,0 +1,21 @@
+.district-list-editor {
+  flex: 1 1 35%;
+  border: 1px black solid;
+  margin-right: 20px;
+  padding: 10px;
+}
+
+.district-list-editor_item {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.district-popup_input {
+  margin-bottom: 13px;
+}
+
+.district-popup_buttons {
+  display: flex;
+  justify-content: space-between;
+}

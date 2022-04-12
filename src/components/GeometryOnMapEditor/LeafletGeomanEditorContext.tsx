@@ -36,7 +36,9 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
         this.polygonDeleteActions = [];
         this.polygonIdMap = {};
         this.palette = new Palette();
-        this.mapMode = MapMode.normalMode;
+        this.mapMode = mapContainer.on('pm:globalremovalmodetoggled', (e: any) => {
+            this.mapMode = e.enabled ? MapMode.deleteMode : MapMode.normalMode;
+        });
     }
 
     public setSelfIntersection(selfIntersection: boolean) {
@@ -65,11 +67,11 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
         })
     }
 
-    public onMapMode() {
-        this.mapContainer.on('pm:globalremovalmodetoggled', (e: any) => {
-            this.mapMode = e.enabled ? MapMode.deleteMode : MapMode.normalMode;
-        });
-    }
+    // public onMapMode() {
+    //     this.mapContainer.on('pm:globalremovalmodetoggled', (e: any) => {
+    //         this.mapMode = e.enabled ? MapMode.deleteMode : MapMode.normalMode;
+    //     });
+    // }
 
     public getCurrentMapMode() {
         return this.mapMode;
@@ -107,6 +109,7 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
         const leafletId = this.getLeafletIdByPoligonId(id);
         this.mapContainer.eachLayer((layer: any) => {
             if (layer._leaflet_id === leafletId) {
+                this.palette.returnColor(layer.options.color);
                 this.mapContainer.removeLayer(layer);
             }
         })

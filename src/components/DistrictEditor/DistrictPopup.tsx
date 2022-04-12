@@ -4,7 +4,8 @@ import { observer } from 'mobx-react';
 import React, { ChangeEvent } from 'react';
 import { Marker, Popup } from 'react-leaflet';
 import { District } from './District';
-import { icon } from './Icon/Icon'
+import { icon } from './Icon/Icon';
+import './districtEditor.css';
 
 interface IDistrictPopupProps {
   position: LatLngExpression;
@@ -17,7 +18,7 @@ const DistrictPopup = observer((props: IDistrictPopupProps) => {
   const [availableSaveButton, setAvailableSaveButton] = React.useState<boolean>(true);
 
   React.useEffect(() => {
-    setAvailableSaveButton(props.district.districtName === '' ? true : false); 
+    setAvailableSaveButton(props.district.districtName === '' ? true : false);
   }, [props.district.districtName])
 
   const onCancel = React.useCallback(() => {
@@ -29,7 +30,7 @@ const DistrictPopup = observer((props: IDistrictPopupProps) => {
     props.visible.current.closePopup();
   }, [props.visible])
 
-  const testFunc = React.useCallback(() => {
+  const saveInitialName = React.useCallback(() => {
     setOriginalDistrictName(props.district.districtName);
   }, [props.position])
 
@@ -40,15 +41,19 @@ const DistrictPopup = observer((props: IDistrictPopupProps) => {
   return (
     <>
       <Marker icon={icon} position={props.position} ref={props.visible}>
-        <Popup minWidth={200} onOpen={testFunc} closeButton={false}>
+        <Popup minWidth={200} onOpen={saveInitialName} closeButton={false}>
           <Input
-            style={{ marginBottom: "13px" }}
+            className='district-popup_input'
             value={props.district.districtName}
             onChange={renameDistrict}
           />
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Button type="default" size="small" onClick={onCancel}>Отмена</Button>
-            <Button type="primary" size="small" disabled={availableSaveButton} onClick={onSave}>Сохранить</Button>
+          <div className='district-popup_buttons'>
+            <Button type="default" size="small" onClick={onCancel}>
+              Отмена
+            </Button>
+            <Button type="primary" size="small" disabled={availableSaveButton} onClick={onSave}>
+              Сохранить
+            </Button>
           </div>
         </Popup>
       </Marker>
