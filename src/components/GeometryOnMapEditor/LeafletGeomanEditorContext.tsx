@@ -36,8 +36,9 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
         this.polygonDeleteActions = [];
         this.polygonIdMap = {};
         this.palette = new Palette();
-        this.mapMode = mapContainer.on('pm:globalremovalmodetoggled', (e: any) => {
-            this.mapMode = e.enabled ? MapMode.deleteMode : MapMode.normalMode;
+        this.mapMode = MapMode.NormalMode;
+        this.mapContainer.on('pm:globalremovalmodetoggled', (e: any) => {
+            this.mapMode = e.enabled ? MapMode.DeleteMode : MapMode.NormalMode;
         });
     }
 
@@ -66,12 +67,6 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
             removalMode: true
         })
     }
-
-    // public onMapMode() {
-    //     this.mapContainer.on('pm:globalremovalmodetoggled', (e: any) => {
-    //         this.mapMode = e.enabled ? MapMode.deleteMode : MapMode.normalMode;
-    //     });
-    // }
 
     public getCurrentMapMode() {
         return this.mapMode;
@@ -105,8 +100,8 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
         this.polygonDeleteActions.push(action);
     }
 
-    public deleteLayer(id: number) {
-        const leafletId = this.getLeafletIdByPoligonId(id);
+    public deletePolygon(id: number) {
+        const leafletId = this.getLeafletIdByPolygonId(id);
         this.mapContainer.eachLayer((layer: any) => {
             if (layer._leaflet_id === leafletId) {
                 this.palette.returnColor(layer.options.color);
@@ -134,7 +129,7 @@ export class LeafletGeomanEditorContext implements GeometryOnMapEditorInterface 
         return this.polygonIdMap[leafletId];
     }
 
-    private getLeafletIdByPoligonId(id: number): number {
+    private getLeafletIdByPolygonId(id: number): number {
         return Number(Object.keys(this.polygonIdMap).find((key: any) => this.polygonIdMap[key] === id));
     }
 

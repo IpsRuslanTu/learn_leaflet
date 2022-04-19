@@ -2,7 +2,7 @@ import { observer } from "mobx-react";
 import React from "react";
 import { DistrictStore } from "../../store/DistrictStore";
 import { District } from "./District";
-import './districtEditor.css';
+import './DistrictEditor.css';
 
 interface DistrictListEditorProps {
   districtStore: DistrictStore;

@@ -22,27 +22,26 @@ const DistrictEditor = observer((props: DistrictEditorProps) => {
         throw new Error("Geometry context is undefined")
     }
 
-    // const [popupVisible, setPopupVisible] = React.useState<boolean>(false);
     const [selectedDistrict, setSelectedDistrict] = React.useState<District | undefined>(undefined);
     const [selectedDistrictId, setSelectedDistrictId] = React.useState<number | undefined>(undefined);
-    const [markerPos, setMarkerPos] = React.useState<LatLngExpression>([56.631124, 47.894478]);
+    const [popupPosition, setPopupPosition] = React.useState<LatLngExpression>([56.631124, 47.894478]);
 
     const onPolygonClick = React.useCallback((e: any, districtId: number) => {
+        if (geometryContext.getCurrentMapMode() === MapMode.DeleteMode) {
+            setSelectedDistrictId(undefined);
+            return;
+        }
         setSelectedDistrictId(districtId);
-        setMarkerPos(e.latlng);
-        // setPopupVisible(true);
+        setPopupPosition(e.latlng);
     }, [])
 
     React.useEffect(() => {
-        if (!selectedDistrictId) return;
 
         const district = props.districtStore.districts.find((x: District) => x.id === selectedDistrictId)
 
         setSelectedDistrict(district);
 
-        if (!district) return;
-
-    }, [selectedDistrictId, props.districtStore.districts, markerPos]);
+    }, [selectedDistrictId, props.districtStore.districts, popupPosition]);
 
     React.useEffect(() => {
         geometryContext.setSelfIntersection(false);
@@ -58,7 +57,7 @@ const DistrictEditor = observer((props: DistrictEditorProps) => {
         });
 
         props.districtStore.onDistrictRemove((id: number) => {
-            geometryContext.deleteLayer(id);
+            geometryContext.deletePolygon(id);
         })
     }, []);
 
@@ -77,17 +76,12 @@ const DistrictEditor = observer((props: DistrictEditorProps) => {
         });
     }, [])
 
-    if (geometryContext.getCurrentMapMode() !== MapMode.deleteMode
-        && selectedDistrict !== undefined) {
-        return (
-            <DistrictPopup
-                position={markerPos}
-                // visible={popupVisible}
-                district={selectedDistrict}
-            />
-        )
-    }
-    else return null;
+    return (
+        <DistrictPopup
+            position={popupPosition}
+            district={selectedDistrict}
+        />
+    )
 })
 
 export default DistrictEditor;

@@ -1,1 +1,1 @@
-export enum MapMode { normalMode = "normalMode", deleteMode = "deleteMode" };
+export enum MapMode { NormalMode = "normalMode", DeleteMode = "deleteMode" };

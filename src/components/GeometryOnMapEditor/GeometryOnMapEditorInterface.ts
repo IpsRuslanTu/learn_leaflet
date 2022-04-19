@@ -20,9 +20,7 @@ export interface GeometryOnMapEditorInterface {
 
     getPolygonIdByLeafletId(leafletId: number): number;
 
-    deleteLayer: (id: number) => void;
-
-    // onMapMode: () => void;
+    deletePolygon: (id: number) => void;
 
     getCurrentMapMode: () => string;
 }
